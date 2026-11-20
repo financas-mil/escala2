@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CONTROLE DE ROTATIVIDADE — Gestão Diária de Escala</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fonte Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#FFF7ED',
+              100: '#FFEDD5',
+              200: '#FED7AA',
+              400: '#FB923C',
+              500: '#F97316',
+              600: '#EA580C',
+              700: '#C2410C',
+            }
+          },
+          boxShadow: {
+            'soft': '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
+            'elevated': '0 12px 28px -6px rgba(15, 23, 42, 0.12), 0 4px 12px -4px rgba(234, 88, 12, 0.08)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #F8FAFC;
+      color: #0F172A;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, .font-display {
+      font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+    select.clean-select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23EA580C' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.75rem center;
+      background-repeat: no-repeat;
+      background-size: 1.15em 1.15em;
+      padding-right: 2.25rem;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+    select.clean-select option {
+      background-color: #FFFFFF;
+      color: #0F172A;
+      padding: 10px 14px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900 selection:bg-brand-600 selection:text-white">
+
+  <!-- ===================================================================== -->
+  <!-- TELA DE LOGIN APENAS COM SENHA                                        -->
+  <!-- ===================================================================== -->
+  <div id="login-screen" class="fixed inset-0 bg-white z-50 flex flex-col justify-between p-6 md:p-12 overflow-y-auto">
+    <!-- Topo esquerdo -->
+    <div class="flex items-center gap-2.5">
+      <span class="text-brand-600 font-display font-extrabold text-sm sm:text-base tracking-tight uppercase">CONTROLE DE ROTATIVIDADE</span>
+      <span class="bg-brand-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">Gestão Diária de Escala</span>
+    </div>
+
+    <!-- Conteúdo Central: 2 Colunas -->
+    <div class="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center my-auto py-8">
+      <!-- Coluna Esquerda: Ilustração Estilizada -->
+      <div class="lg:col-span-7 flex justify-center">
+        <div class="relative w-full max-w-lg bg-orange-50/50 border border-orange-100 p-8 rounded-3xl flex flex-col items-center justify-center">
+          <svg class="w-full h-auto max-h-[340px]" viewBox="0 0 500 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="80" y="80" width="120" height="220" rx="4" stroke="#FED7AA" stroke-width="8" fill="#FFF"/>
+            <path d="M80 130H200M80 180H200M80 230H200M120 80V300M160 80V300" stroke="#FFEDD5" stroke-width="3"/>
+            <rect x="95" y="95" width="25" height="25" rx="3" fill="#FED7AA"/>
+            <rect x="135" y="100" width="30" height="20" rx="3" fill="#FFEDD5"/>
+            <rect x="100" y="145" width="35" height="25" rx="3" fill="#FDBA74"/>
+            <rect x="145" y="150" width="25" height="20" rx="3" fill="#FED7AA"/>
+            <rect x="220" y="210" width="180" height="90" rx="6" fill="#FFFFFF" stroke="#FED7AA" stroke-width="4"/>
+            <rect x="270" y="140" width="90" height="65" rx="6" fill="#FFEDD5"/>
+            <rect x="280" y="150" width="70" height="45" rx="3" fill="#FFF7ED"/>
+            <path d="M305 205H335V215H305V205Z" fill="#EA580C"/>
+            <circle cx="310" cy="172" r="6" fill="#EA580C"/>
+            <circle cx="315" cy="100" r="22" fill="#FDBA74"/>
+            <path d="M293 115C293 103.4 302.4 94 314 94H316C327.6 94 337 103.4 337 115V135H293V115Z" fill="#1E293B"/>
+            <path d="M290 135H340V220H290V135Z" fill="#1E293B"/>
+            <rect x="302" y="215" width="12" height="75" fill="#334155"/>
+            <rect x="318" y="215" width="12" height="75" fill="#334155"/>
+            <rect x="298" y="285" width="18" height="10" rx="3" fill="#EA580C"/>
+            <rect x="316" y="285" width="18" height="10" rx="3" fill="#EA580C"/>
+            <rect x="400" y="120" width="35" height="25" rx="4" fill="#EA580C" fill-opacity="0.12"/>
+            <path d="M410 130H425M410 135H420" stroke="#EA580C" stroke-width="2" stroke-linecap="round"/>
+            <rect x="420" y="70" width="30" height="25" rx="4" fill="#FFEDD5"/>
+            <circle cx="435" cy="82" r="3" fill="#10B981"/>
+          </svg>
+          <div class="mt-4 text-center">
+            <span class="text-xs font-bold text-brand-700">CONTROLE DE ROTATIVIDADE • Gestão Diária de Escala</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna Direita: Card de Senha -->
+      <div class="lg:col-span-5">
+        <div class="bg-white border border-orange-100 rounded-3xl shadow-elevated p-8 sm:p-10 space-y-6">
+          <div>
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-brand-600">Gestão Diária de Escala</span>
+            <h2 class="text-2xl font-extrabold text-brand-700 mt-0.5">Acesso Restrito</h2>
+            <p class="text-xs text-slate-500 mt-1">Insira a senha do sistema para entrar</p>
+          </div>
+
+          <form onsubmit="checkPassword(event)" class="space-y-4">
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-brand-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              </span>
+              <input type="password" id="password-input" placeholder="Senha (padrão: 123)" class="w-full bg-orange-50/30 border border-slate-200 rounded-xl pl-10 pr-12 py-3.5 text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition" required autofocus />
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3.5">
+                <button type="button" onclick="togglePasswordVisibility()" class="text-slate-400 hover:text-brand-600 cursor-pointer">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-brand-600 hover:from-orange-600 hover:to-brand-700 text-white font-bold py-3.5 rounded-xl shadow-md shadow-orange-500/20 transition cursor-pointer">
+              Entrar no Sistema
+            </button>
+          </form>
+
+          <div id="login-error" class="text-xs text-rose-600 font-medium text-center hidden">Senha incorreta! (Padrão: 123)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <div class="text-center text-xs text-slate-400 py-2">
+      CONTROLE DE ROTATIVIDADE • Gestão Diária de Escala © 2026
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- CABEÇALHO CLARO COM DESTAQUE LARANJA                                  -->
+  <!-- ===================================================================== -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-orange-100 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between py-3.5 gap-3">
+        <!-- Identidade: CONTROLE DE ROTATIVIDADE, gestão diaria de escala -->
+        <div class="flex items-center gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-brand-600 flex items-center justify-center text-white shadow-md shadow-orange-500/20 shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <h1 class="font-display font-extrabold text-lg sm:text-xl tracking-tight text-brand-600 uppercase">
+                CONTROLE DE ROTATIVIDADE
+              </h1>
+              <span class="bg-orange-50 text-brand-700 border border-orange-200 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                Gestão Diária de Escala
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium">Escala diária de turnos, polivalência e auditoria mensal</p>
+          </div>
+        </div>
+
+        <!-- Botões de Ação, Sair e Backup -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div id="save-indicator" class="text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-full flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            Sincronizado
+          </div>
+
+          <button onclick="openChangePasswordModal()" title="Alterar Senha do Sistema" class="text-xs font-semibold bg-white hover:bg-orange-50 text-slate-700 hover:text-brand-700 border border-slate-200 hover:border-orange-200 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+            <svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+            Senha
+          </button>
+
+          <button onclick="exportBackupJSON()" title="Salvar cópia de segurança" class="text-xs font-semibold bg-white hover:bg-orange-50 text-slate-700 hover:text-brand-700 border border-slate-200 hover:border-orange-200 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+            <svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Backup
+          </button>
+
+          <label title="Restaurar backup (.json)" class="text-xs font-semibold bg-white hover:bg-orange-50 text-slate-700 hover:text-brand-700 border border-slate-200 hover:border-orange-200 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+            <svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            Restaurar
+            <input type="file" id="import-json-input" accept=".json" class="hidden" onchange="importBackupJSON(event)" />
+          </label>
+
+          <!-- Botão Sair / Logout -->
+          <button onclick="logoutSystem()" title="Encerrar sessão atual" class="text-xs font-semibold bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white border border-rose-200 px-3.5 py-1.5 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            Sair
+          </button>
+        </div>
+      </div>
+
+      <!-- Navegação por Abas -->
+      <nav class="flex space-x-2 overflow-x-auto pt-1" aria-label="Tabs">
+        <button onclick="switchTab('diario')" id="tab-btn-diario" class="tab-btn px-3.5 py-2.5 text-sm font-bold border-b-2 border-brand-600 text-brand-600 whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          Escala Diária
+        </button>
+        <button onclick="switchTab('relatorio')" id="tab-btn-relatorio" class="tab-btn px-3.5 py-2.5 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-brand-600 whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Relatório &amp; Auditoria
+        </button>
+        <button onclick="switchTab('equipe')" id="tab-btn-equipe" class="tab-btn px-3.5 py-2.5 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-brand-600 whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Equipe
+          <span id="badge-team-count" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-orange-50 text-brand-700 border border-orange-200 tabular-nums">0</span>
+        </button>
+        <button onclick="switchTab('config')" id="tab-btn-config" class="tab-btn px-3.5 py-2.5 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-brand-600 whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+          Atividades &amp; Nomenclaturas
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Toast de Notificações -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Conteúdo Principal -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- =================================================================== -->
+    <!-- ABA 1: ESCALA DIÁRIA                                                -->
+    <!-- =================================================================== -->
+    <section id="view-diario" class="space-y-5">
+      <div class="bg-white rounded-2xl shadow-soft border border-slate-200/80 p-5 space-y-5">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <div class="inline-flex items-center bg-slate-50 p-1 rounded-xl border border-slate-200">
+              <button onclick="changeDateBy(-1)" class="p-1.5 hover:bg-orange-50 text-slate-600 hover:text-brand-600 rounded-lg transition cursor-pointer" title="Dia anterior">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+              </button>
+              <input type="date" id="daily-date" onchange="renderDailyView()" class="bg-transparent px-2.5 py-1 text-sm font-bold text-slate-900 focus:outline-none cursor-pointer" />
+              <button onclick="changeDateBy(1)" class="p-1.5 hover:bg-orange-50 text-slate-600 hover:text-brand-600 rounded-lg transition cursor-pointer" title="Próximo dia">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+
+            <button onclick="goToToday()" class="px-3 py-2 text-xs font-bold text-brand-700 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-xl transition cursor-pointer">
+              Hoje
+            </button>
+
+            <span id="daily-weekday-label" class="text-xs font-bold text-brand-700 bg-orange-50 border border-orange-200 px-3 py-1.5 rounded-xl"></span>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- BOTÃO WHATSAPP -->
+            <button onclick="openWhatsAppModal()" class="text-xs font-bold bg-[#25D366] hover:bg-[#20BD5A] text-slate-950 px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5 cursor-pointer">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/>
+              </svg>
+              Gerar Escala WhatsApp
+            </button>
+
+            <button onclick="copyPreviousDay()" class="text-xs font-semibold bg-white hover:bg-orange-50 text-slate-700 hover:text-brand-700 border border-slate-200 hover:border-orange-200 px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+              <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              Copiar Dia Anterior
+            </button>
+
+            <button onclick="replicateAllFirstToSecond()" class="text-xs font-bold bg-gradient-to-r from-orange-500 to-brand-600 hover:from-orange-600 hover:to-brand-700 text-white px-4 py-2 rounded-xl shadow-md shadow-orange-500/20 transition flex items-center gap-1.5 cursor-pointer">
+              <svg class="w-4 h-4 text-orange-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+              Repetir 1º → 2º (Vazios)
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">Alocação por Setor</span>
+              <span id="daily-progress-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-orange-50 text-brand-700 border border-orange-200 tabular-nums">0/0 preenchidos</span>
+            </div>
+            <div id="daily-alerts-summary" class="text-xs"></div>
+          </div>
+
+          <div class="w-full h-2 bg-orange-100 rounded-full overflow-hidden">
+            <div id="daily-progress-bar" class="h-full bg-gradient-to-r from-orange-500 to-brand-600 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+
+          <div id="daily-family-cards" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-1"></div>
+        </div>
+      </div>
+
+      <!-- Tabela Principal -->
+      <div class="bg-white rounded-2xl shadow-soft border border-slate-200/80 overflow-hidden">
+        <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="relative w-full sm:w-72">
+            <input type="text" id="daily-search" oninput="renderDailyTableOnly()" placeholder="Buscar colaborador por nome..." class="w-full bg-white text-slate-900 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" />
+            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-brand-700 hidden md:inline">Filtrar:</span>
+            <select id="daily-filter-status" onchange="renderDailyTableOnly()" class="clean-select bg-white text-slate-800 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer">
+              <option value="all">Todos os colaboradores ativos</option>
+              <option value="pending">Pendentes de preenchimento</option>
+              <option value="alerts">Com alerta de repetição</option>
+              <option value="sorting">Em Sorting</option>
+              <option value="bipagem">Em Bipagem &amp; Etiqueta</option>
+              <option value="carretas">Em Docas / Carretas</option>
+              <option value="apoio">Em Apoio / Qualidade</option>
+              <option value="ausencia">Ausências / Folgas / Férias</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-orange-50/60 border-b border-orange-100 text-[11px] font-extrabold text-brand-700 uppercase tracking-wider">
+                <th class="py-3 px-4 w-12 text-center">#</th>
+                <th class="py-3 px-4 min-w-[230px]">Colaborador</th>
+                <th class="py-3 px-4 min-w-[230px]">1º Momento</th>
+                <th class="py-3 px-1 w-10 text-center"></th>
+                <th class="py-3 px-4 min-w-[230px]">2º Momento</th>
+                <th class="py-3 px-4 min-w-[220px]">Monitoramento</th>
+              </tr>
+            </thead>
+            <tbody id="daily-table-body" class="divide-y divide-slate-100 text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ABA 2: RELATÓRIO & AUDITORIA                                        -->
+    <!-- =================================================================== -->
+    <section id="view-relatorio" class="hidden space-y-6">
+      <div class="bg-white p-5 rounded-2xl shadow-soft border border-slate-200/80 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div class="flex flex-wrap items-end gap-4">
+          <div>
+            <label for="report-month" class="block text-[11px] font-extrabold text-brand-700 uppercase tracking-wider mb-1.5">Mês de Referência</label>
+            <input type="month" id="report-month" onchange="renderReportView()" class="border border-slate-200 bg-slate-50 rounded-xl px-3.5 py-2 text-sm font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500" />
+          </div>
+          <div class="w-full sm:w-80">
+            <label for="report-employee-select" class="block text-[11px] font-extrabold text-brand-700 uppercase tracking-wider mb-1.5">Auditoria Individual (Raio-X)</label>
+            <select id="report-employee-select" onchange="renderIndividualXRay()" class="clean-select w-full border border-slate-200 rounded-xl px-3.5 py-2 text-sm font-semibold text-slate-900 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer">
+              <option value="">-- Selecione um colaborador --</option>
+            </select>
+          </div>
+        </div>
+
+        <button onclick="exportMonthlyCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2 cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Exportar Excel (.CSV)
+        </button>
+      </div>
+
+      <!-- Painel Raio-X Individual -->
+      <div id="individual-xray-panel" class="hidden bg-white p-6 rounded-2xl shadow-elevated border border-orange-200 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div class="flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-200 text-brand-700 font-display font-extrabold flex items-center justify-center text-base" id="xray-initials">BS</div>
+            <div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-brand-600">Raio-X de Rotatividade Individual</span>
+              <h3 id="xray-employee-name" class="text-xl font-extrabold text-slate-900">Nome</h3>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 flex-wrap">
+            <div id="xray-kpi-badges" class="flex flex-wrap gap-2"></div>
+            <button onclick="closeXRayPanel()" class="text-xs font-bold text-slate-600 hover:text-brand-700 bg-slate-100 hover:bg-orange-50 px-3.5 py-2 rounded-xl transition cursor-pointer">Fechar Raio-X</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-5 space-y-3">
+            <h4 class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">Distribuição de Turnos no Mês</h4>
+            <div id="xray-bars-list" class="space-y-3 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/70"></div>
+          </div>
+          <div class="lg:col-span-7 space-y-3">
+            <h4 class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">Histórico Cronológico Dia a Dia</h4>
+            <div class="overflow-x-auto border border-slate-200 rounded-2xl max-h-80">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead class="bg-orange-50/70 text-brand-700 font-extrabold uppercase sticky top-0 border-b border-orange-100">
+                  <tr>
+                    <th class="py-2.5 px-3.5">Data</th>
+                    <th class="py-2.5 px-3.5">Dia</th>
+                    <th class="py-2.5 px-3.5">1º Momento</th>
+                    <th class="py-2.5 px-3.5">2º Momento</th>
+                  </tr>
+                </thead>
+                <tbody id="xray-timeline-body" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela Consolidada -->
+      <div class="bg-white rounded-2xl shadow-soft border border-slate-200/80 overflow-hidden">
+        <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-base font-extrabold text-brand-700">Consolidado Mensal de Turnos</h3>
+            <p class="text-xs text-slate-500">Clique no nome de qualquer colaborador para abrir o Raio-X detalhado.</p>
+          </div>
+          <div class="relative w-full sm:w-64">
+            <input type="text" id="report-search" oninput="renderConsolidatedTable()" placeholder="Filtrar colaborador..." class="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500" />
+            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs tabular-nums" id="consolidated-table">
+            <thead id="consolidated-thead" class="bg-orange-50/60 text-brand-700 font-extrabold uppercase border-b border-orange-100"></thead>
+            <tbody id="consolidated-tbody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ABA 3: EQUIPE                                                       -->
+    <!-- =================================================================== -->
+    <section id="view-equipe" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-4 space-y-6">
+          <div class="bg-white p-5 rounded-2xl shadow-soft border border-slate-200/80">
+            <h3 class="text-base font-extrabold text-brand-700 mb-1">Novo Colaborador</h3>
+            <p class="text-xs text-slate-500 mb-4">Cadastre um colaborador individualmente.</p>
+            <form onsubmit="addSingleEmployee(event)" class="space-y-3.5">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Nome Completo</label>
+                <input type="text" id="new-emp-name" required placeholder="Ex: Beatriz Oliveira Santos" class="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Observação / Turno Base</label>
+                <input type="text" id="new-emp-role" value="Operação" class="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500" />
+              </div>
+              <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-brand-600 hover:from-orange-600 hover:to-brand-700 text-white font-bold text-sm py-2.5 rounded-xl shadow-md shadow-orange-500/20 transition cursor-pointer">
+                + Cadastrar Colaborador
+              </button>
+            </form>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl shadow-soft border border-slate-200/80">
+            <h3 class="text-base font-extrabold text-brand-700 mb-1">Importação em Lote</h3>
+            <p class="text-xs text-slate-500 mb-3">Cole sua lista de colaboradores (um nome por linha).</p>
+            <textarea id="bulk-emp-names" rows="5" placeholder="João da Silva
+Maria Oliveira" class="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded-xl p-3 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 mb-3"></textarea>
+            <button onclick="addBulkEmployees()" class="w-full bg-orange-50 hover:bg-orange-100 text-brand-700 font-bold text-sm py-2.5 rounded-xl border border-orange-200 transition cursor-pointer">
+              Importar Lista de Nomes
+            </button>
+          </div>
+        </div>
+
+        <div class="lg:col-span-8 bg-white rounded-2xl shadow-soft border border-slate-200/80 overflow-hidden flex flex-col">
+          <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 class="text-base font-extrabold text-brand-700">Base de Colaboradores</h3>
+              <p class="text-xs text-slate-500">Edite nomes, acesse o Raio-X mensal, inative ou remova registros.</p>
+            </div>
+            <div class="relative w-full sm:w-64">
+              <input type="text" id="team-search" oninput="renderTeamView()" placeholder="Buscar na equipe..." class="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500" />
+              <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
+          </div>
+          <div class="overflow-x-auto flex-1">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead class="bg-orange-50/60 text-[11px] font-extrabold text-brand-700 uppercase border-b border-orange-100">
+                <tr>
+                  <th class="py-3 px-4">Colaborador</th>
+                  <th class="py-3 px-4">Histórico</th>
+                  <th class="py-3 px-4">Situação</th>
+                  <th class="py-3 px-4 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="team-table-body" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ABA 4: ATIVIDADES & NOMENCLATURAS                                   -->
+    <!-- =================================================================== -->
+    <section id="view-config" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-4 space-y-6">
+          <div class="bg-white p-5 rounded-2xl shadow-soft border border-slate-200/80">
+            <h3 class="text-base font-extrabold text-brand-700 mb-1">Nova Nomenclatura</h3>
+            <p class="text-xs text-slate-500 mb-4">Crie novas atividades operacionais coloridas por grupo.</p>
+            <form onsubmit="addActivityType(event)" class="space-y-3.5">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Nome da Atividade / Status</label>
+                <input type="text" id="new-act-name" required placeholder="Ex: Conferência Reversa" class="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Setor / Cor da Nomenclatura</label>
+                <select id="new-act-family" class="clean-select w-full bg-slate-50 text-slate-900 border border-slate-200 rounded-xl px-3.5 py-2 text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer">
+                  <option value="sorting">Sorting (Azul)</option>
+                  <option value="bipagem">Bipagem &amp; Etiqueta (Roxo/Índigo)</option>
+                  <option value="carretas">Docas / Carretas (Laranja)</option>
+                  <option value="apoio">Apoio / Qualidade (Verde)</option>
+                  <option value="ausencia">Ausências / Folgas / Férias (Cinza)</option>
+                </select>
+              </div>
+              <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-brand-600 hover:from-orange-600 hover:to-brand-700 text-white font-bold text-sm py-2.5 rounded-xl shadow-md shadow-orange-500/20 transition cursor-pointer">
+                + Adicionar Nomenclatura
+              </button>
+            </form>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl shadow-soft border border-slate-200/80">
+            <h4 class="text-xs font-extrabold text-brand-700 uppercase tracking-wider mb-1.5">Regra de Alerta de Repetição</h4>
+            <p class="text-xs text-slate-500 mb-3">Aviso visual quando o colaborador repetir a atividade por quantos dias seguidos?</p>
+            <div class="flex items-center gap-2.5">
+              <input type="number" id="config-repeat-threshold" min="2" max="15" value="3" onchange="updateRepeatThreshold()" class="w-20 bg-slate-50 text-slate-900 border border-slate-200 rounded-xl px-3 py-1.5 text-sm font-extrabold text-center focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500" />
+              <span class="text-xs font-medium text-slate-600">dias consecutivos ou mais</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-8 bg-white rounded-2xl shadow-soft border border-slate-200/80 overflow-hidden">
+          <div class="p-5 border-b border-slate-100">
+            <h3 class="text-base font-extrabold text-brand-700">Nomenclaturas Cadastradas</h3>
+            <p class="text-xs text-slate-500">Renomeie ou desative opções sem perder os históricos.</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead class="bg-orange-50/60 text-[11px] font-extrabold text-brand-700 uppercase border-b border-orange-100">
+                <tr>
+                  <th class="py-3 px-4">Nomenclatura</th>
+                  <th class="py-3 px-4">Cor / Setor</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="activities-table-body" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL GERADOR DE ESCALA WHATSAPP (PADRÃO OFICIAL DO GRUPO)            -->
+  <!-- ===================================================================== -->
+  <div id="whatsapp-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-5">
+    <div class="bg-white rounded-2xl shadow-elevated max-w-6xl w-full max-h-[92vh] flex flex-col border border-orange-100 overflow-hidden">
+      <!-- Cabeçalho do Modal -->
+      <div class="px-6 py-4 border-b border-orange-100 flex flex-wrap items-center justify-between gap-3 bg-orange-50/50">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-[#25D366]/15 border border-[#25D366]/40 text-[#16A34A] flex items-center justify-center">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-base font-extrabold text-brand-700">Gerar Escala de Processamento — WhatsApp</h3>
+            <p class="text-xs text-slate-500">Preencha ou importe os dados do turno e copie o texto pronto para o grupo</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="importFromDailyMoment('m1')" class="text-xs font-bold bg-white hover:bg-orange-50 text-brand-700 border border-orange-200 px-3 py-1.5 rounded-xl transition cursor-pointer" title="Importa nomes da tabela diária (1º Momento)">
+            ↓ Puxar 1º Momento
+          </button>
+          <button onclick="importFromDailyMoment('m2')" class="text-xs font-bold bg-white hover:bg-orange-50 text-orange-700 border border-orange-200 px-3 py-1.5 rounded-xl transition cursor-pointer" title="Importa nomes da tabela diária (2º Momento)">
+            ↓ Puxar 2º Momento
+          </button>
+          <button onclick="closeWhatsAppModal()" class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-200/60 transition cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Corpo em 2 Colunas -->
+      <div class="flex-1 overflow-y-auto p-5 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Formulário Editável -->
+        <div class="lg:col-span-7 space-y-5 pr-1">
+          <!-- Meta do Dia -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-3">
+            <div class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">🎯 Metas &amp; Equipes Gerais</div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Data (DD/MM)</label>
+                <input type="text" id="wa-date" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Volumetria</label>
+                <input type="text" id="wa-volumetria" placeholder="Ex: 24 Mil" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Rotas</label>
+                <input type="text" id="wa-rotas" placeholder="Ex: 210" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Saudação</label>
+                <select id="wa-saudacao" onchange="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none">
+                  <option value="Boa noite, pessoal!">Boa noite</option>
+                  <option value="Bom dia, pessoal!">Bom dia</option>
+                  <option value="Boa tarde, pessoal!">Boa tarde</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">🚚 Carretas</label>
+                <input type="text" id="wa-carretas" placeholder="Ex: Micael / Yan / Rodrigo" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">🚑 SAMU</label>
+                <input type="text" id="wa-samu" placeholder="Ex: Venâncio / Wellington" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Abastecimento -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-3">
+            <div class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">📦 Abastecimento</div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Bancada 02</label>
+                <input type="text" id="wa-abast-02" placeholder="Ex: Anderson / Flávio" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Bancada 03</label>
+                <input type="text" id="wa-abast-03" placeholder="Ex: Paulo Roberto" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Bancada 04</label>
+                <input type="text" id="wa-abast-04" placeholder="Ex: Fábio" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Bancada 05</label>
+                <input type="text" id="wa-abast-05" placeholder="Ex: Victor" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Bancada 06</label>
+                <input type="text" id="wa-abast-06" placeholder="Ex: Moisés" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Bancadas 02 a 06 + Sorting -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">🔹 Bancadas &amp; 🔄 Sorting (Separe nomes por linha)</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- Bancada 02 -->
+              <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-2">
+                <div class="text-xs font-extrabold text-slate-900">🔹 BANCADA 02</div>
+                <textarea id="wa-b02" rows="2" placeholder="Júnior
+Lorena" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                <div class="text-[11px] font-semibold text-slate-500">🔄 Sorting — Bancada 02</div>
+                <textarea id="wa-s02" rows="2" placeholder="Nomes do sorting..." oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+              </div>
+
+              <!-- Bancada 03 -->
+              <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-2">
+                <div class="text-xs font-extrabold text-slate-900">🔹 BANCADA 03</div>
+                <textarea id="wa-b03" rows="2" placeholder="David x Danilo
+Lourenço x Yara" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                <div class="text-[11px] font-semibold text-slate-500">🔄 Sorting — Bancada 03</div>
+                <textarea id="wa-s03" rows="2" placeholder="Ana
+Camila" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+              </div>
+
+              <!-- Bancada 04 -->
+              <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-2">
+                <div class="text-xs font-extrabold text-slate-900">🔹 BANCADA 04</div>
+                <textarea id="wa-b04" rows="2" placeholder="Erinaldo x Willian
+Miguel x Alexandre" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                <div class="text-[11px] font-semibold text-slate-500">🔄 Sorting — Bancada 04</div>
+                <textarea id="wa-s04" rows="2" placeholder="Ana
+Camila" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+              </div>
+
+              <!-- Bancada 05 -->
+              <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-2">
+                <div class="text-xs font-extrabold text-slate-900">🔹 BANCADA 05</div>
+                <textarea id="wa-b05" rows="2" placeholder="Cardoso x Wilton
+Keven x Regis" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                <div class="text-[11px] font-semibold text-slate-500">🔄 Sorting — Bancada 05</div>
+                <textarea id="wa-s05" rows="2" placeholder="Claudiana
+Idacélio" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+              </div>
+
+              <!-- Bancada 06 -->
+              <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-2 sm:col-span-2">
+                <div class="text-xs font-extrabold text-slate-900">🔹 BANCADA 06</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <textarea id="wa-b06" rows="2" placeholder="M.Felipe x Daniel
+Elykelli x Roberto" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                  <textarea id="wa-s06" rows="2" placeholder="Sorting B06:
+Jordão
+Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apoio e Faixas -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-3">
+            <div class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">🛠️ Apoio Operacional &amp; Faixas</div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">🧹 5s</label>
+                <input type="text" id="wa-5s" placeholder="Ex: Yara" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">📦 Volumoso</label>
+                <input type="text" id="wa-volumoso" placeholder="Ex: Valdenir / Ant.Alexandre" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">🛒 Puxar Gaiolas</label>
+                <input type="text" id="wa-gaiolas" placeholder="Ex: Hélio" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">🔧 Concertos</label>
+                <input type="text" id="wa-concertos" placeholder="Ex: Berg" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">🔤 Letras</label>
+                <input type="text" id="wa-letras" placeholder="Ex: A-1 até E-10" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">🏍️ Moto</label>
+                <input type="text" id="wa-moto" placeholder="Ex: A-1 até A-20" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview Pronto para Copiar -->
+        <div class="lg:col-span-5 flex flex-col h-full">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">Pré-visualização da Mensagem</span>
+            <span class="text-[11px] text-[#16A34A] font-bold">Formatação WhatsApp Ativa</span>
+          </div>
+          <textarea id="wa-preview-box" readonly class="flex-1 min-h-[380px] w-full bg-[#0B141A] text-[#E9EDEF] border border-slate-300 rounded-xl p-4 font-sans text-xs leading-relaxed focus:outline-none resize-none"></textarea>
+        </div>
+      </div>
+
+      <!-- Rodapé com Botões de Cópia e Envio -->
+      <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex flex-wrap items-center justify-between gap-3">
+        <span class="text-xs text-slate-500">Os valores digitados ficam salvos automaticamente para o próximo turno.</span>
+        <div class="flex items-center gap-2.5">
+          <button onclick="closeWhatsAppModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-200/70 rounded-xl transition cursor-pointer">
+            Fechar
+          </button>
+          <button onclick="sendDirectWhatsApp()" class="px-4 py-2.5 text-xs font-bold bg-white hover:bg-emerald-50 text-[#16A34A] border border-[#25D366]/50 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+            Abrir no WhatsApp ↗
+          </button>
+          <button onclick="copyWhatsAppText()" class="px-5 py-2.5 text-xs font-extrabold bg-[#25D366] hover:bg-[#20BD5A] text-slate-950 rounded-xl shadow-sm transition flex items-center gap-2 cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+            Copiar Escala Pronta
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Customizado Genérico / Confirmação -->
+  <div id="custom-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-elevated max-w-md w-full p-6 space-y-4 border border-slate-200">
+      <h3 id="modal-title" class="text-lg font-extrabold text-brand-700">Título</h3>
+      <p id="modal-message" class="text-sm text-slate-600 leading-relaxed"></p>
+      <div id="modal-input-wrapper" class="hidden">
+        <input type="text" id="modal-input" class="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500" />
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal()" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition cursor-pointer">Cancelar</button>
+        <button id="modal-confirm-btn" class="px-4 py-2 text-sm font-bold bg-gradient-to-r from-orange-500 to-brand-600 text-white rounded-xl shadow-md transition cursor-pointer">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Especial para Alterar Senha -->
+  <div id="password-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-elevated max-w-md w-full p-6 space-y-4 border border-slate-200">
+      <h3 class="text-lg font-extrabold text-brand-700">Alterar Senha de Acesso</h3>
+      <p class="text-sm text-slate-600">Digite a senha atual e defina a nova senha abaixo:</p>
+      <form onsubmit="submitChangePassword(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Senha Atual</label>
+          <input type="password" id="current-password" class="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500" required />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nova Senha</label>
+          <input type="password" id="new-password" class="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500" required />
+        </div>
+        <div id="password-error" class="text-xs text-rose-600 font-medium hidden">Senha atual incorreta!</div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeChangePasswordModal()" class="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition cursor-pointer">Cancelar</button>
+          <button type="submit" class="px-4 py-2 text-sm font-bold bg-gradient-to-r from-orange-500 to-brand-600 text-white rounded-xl shadow-md transition cursor-pointer">Salvar Nova Senha</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    const STORAGE_KEY = 'rotatividade_escala_v6';
+    const WA_STORAGE_KEY = 'rotatividade_whatsapp_template_v1';
+    const DEFAULT_SYSTEM_PASSWORD = '123';
+
+    function getSystemPassword() {
+      return localStorage.getItem('rotatividade_custom_password') || DEFAULT_SYSTEM_PASSWORD;
+    }
+
+    function checkPassword(e) {
+      e.preventDefault();
+      const val = document.getElementById('password-input').value;
+      if (val === getSystemPassword()) {
+        document.getElementById('login-screen').style.display = 'none';
+        sessionStorage.setItem('rotatividade_auth', 'true');
+      } else {
+        document.getElementById('login-error').classList.remove('hidden');
+      }
+    }
+
+    function logoutSystem() {
+      sessionStorage.removeItem('rotatividade_auth');
+      document.getElementById('password-input').value = '';
+      document.getElementById('login-error').classList.add('hidden');
+      document.getElementById('login-screen').style.display = 'flex';
+    }
+
+    function togglePasswordVisibility() {
+      const pwd = document.getElementById('password-input');
+      pwd.type = pwd.type === 'password' ? 'text' : 'password';
+    }
+
+    function openChangePasswordModal() {
+      document.getElementById('current-password').value = '';
+      document.getElementById('new-password').value = '';
+      document.getElementById('password-error').classList.add('hidden');
+      const m = document.getElementById('password-modal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+    }
+
+    function closeChangePasswordModal() {
+      const m = document.getElementById('password-modal');
+      m.classList.add('hidden'); m.classList.remove('flex');
+    }
+
+    function submitChangePassword(e) {
+      e.preventDefault();
+      const current = document.getElementById('current-password').value;
+      const newPass = document.getElementById('new-password').value;
+
+      if (current === getSystemPassword()) {
+        localStorage.setItem('rotatividade_custom_password', newPass);
+        closeChangePasswordModal();
+        showToast('Senha alterada com sucesso!');
+      } else {
+        document.getElementById('password-error').classList.remove('hidden');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('rotatividade_auth') === 'true') {
+        document.getElementById('login-screen').style.display = 'none';
+      }
+      loadState();
+      updateTeamBadge();
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+
+      document.getElementById('daily-date').value = `${y}-${m}-${d}`;
+      document.getElementById('report-month').value = `${y}-${m}`;
+      renderDailyView();
+    });
+
+    const DEFAULT_ACTIVITIES = [
+      { id: 'act_1', name: 'Sorting', family: 'sorting', active: true },
+      { id: 'act_2', name: 'Primeiro Sorting', family: 'sorting', active: true },
+      { id: 'act_3', name: 'Segundo Sorting', family: 'sorting', active: true },
+      { id: 'act_4', name: 'Bipagem & Etiqueta', family: 'bipagem', active: true },
+      { id: 'act_5', name: 'Bipagem', family: 'bipagem', active: true },
+      { id: 'act_6', name: 'Etiquetagem', family: 'bipagem', active: true },
+      { id: 'act_7', name: 'Docas / Carretas', family: 'carretas', active: true },
+      { id: 'act_8', name: 'Apoio / Qualidade', family: 'apoio', active: true },
+      { id: 'act_9', name: 'Inventário', family: 'apoio', active: true },
+      { id: 'act_10', name: 'Conserto', family: 'apoio', active: true },
+      { id: 'act_11', name: 'SAMU', family: 'apoio', active: true },
+      { id: 'act_17', name: 'Florrec', family: 'apoio', active: true },
+      { id: 'act_18', name: 'Abastecimento', family: 'apoio', active: true },
+      { id: 'act_19', name: '5s', family: 'apoio', active: true },
+      { id: 'act_20', name: 'Puxar Gaiolas', family: 'apoio', active: true },
+      { id: 'act_12', name: 'DSR', family: 'ausencia', active: true },
+      { id: 'act_13', name: 'Falta', family: 'ausencia', active: true },
+      { id: 'act_14', name: 'Banco de Horas', family: 'ausencia', active: true },
+      { id: 'act_15', name: 'Domingo do Mês', family: 'ausencia', active: true },
+      { id: 'act_16', name: 'Férias', family: 'ausencia', active: true }
+    ];
+
+    const DEFAULT_EMPLOYEES = [
+      { id: 'emp_1', name: 'Antônio Matias Júnior', role: 'Operação', active: true },
+      { id: 'emp_2', name: 'Beatriz Oliveira Santos', role: 'Operação', active: true },
+      { id: 'emp_3', name: 'Carlos Eduardo Lima', role: 'Operação', active: true },
+      { id: 'emp_4', name: 'Mariana Souza Oliveira', role: 'Operação', active: true }
+    ];
+
+    const FAMILY_META = {
+      sorting: {
+        label: 'Sorting',
+        icon: '📦',
+        selectClass: 'bg-sky-50/90 text-sky-800 border-sky-200 ring-1 ring-sky-200/60',
+        pillClass: 'bg-sky-50 text-sky-700 border-sky-200',
+        barClass: 'bg-sky-500'
+      },
+      bipagem: {
+        label: 'Bipagem & Etiqueta',
+        icon: '🏷️',
+        selectClass: 'bg-indigo-50/90 text-indigo-800 border-indigo-200 ring-1 ring-indigo-200/60',
+        pillClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+        barClass: 'bg-indigo-500'
+      },
+      carretas: {
+        label: 'Docas / Carretas',
+        icon: '🚛',
+        selectClass: 'bg-orange-50/90 text-orange-800 border-orange-200 ring-1 ring-orange-200/60',
+        pillClass: 'bg-orange-50 text-orange-700 border-orange-200',
+        barClass: 'bg-orange-500'
+      },
+      apoio: {
+        label: 'Apoio / Qualidade',
+        icon: '🛠️',
+        selectClass: 'bg-emerald-50/90 text-emerald-800 border-emerald-200 ring-1 ring-emerald-200/60',
+        pillClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+        barClass: 'bg-emerald-500'
+      },
+      ausencia: {
+        label: 'Ausências / Folgas',
+        icon: '🗓️',
+        selectClass: 'bg-slate-100 text-slate-700 border-slate-300',
+        pillClass: 'bg-slate-100 text-slate-600 border-slate-200',
+        barClass: 'bg-slate-400'
+      }
+    };
+
+    const AVATAR_COLORS = [
+      'bg-orange-100 text-brand-700 border border-orange-200',
+      'bg-amber-100 text-amber-800 border border-amber-200',
+      'bg-sky-100 text-sky-800 border border-sky-200',
+      'bg-indigo-100 text-indigo-800 border border-indigo-200',
+      'bg-emerald-100 text-emerald-800 border border-emerald-200',
+      'bg-rose-100 text-rose-800 border border-rose-200'
+    ];
+
+    let state = { employees: [], activities: [], logs: {}, repeatThreshold: 3 };
+    let activeSectorCardFilter = null;
+
+    function loadState() {
+      const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('logiflow_shopee_express_v5');
+      if (saved) {
+        try { state = { ...state, ...JSON.parse(saved) }; } catch (e) {}
+      }
+      if (!state.activities || state.activities.length === 0) state.activities = JSON.parse(JSON.stringify(DEFAULT_ACTIVITIES));
+      if (!state.employees || state.employees.length === 0) state.employees = JSON.parse(JSON.stringify(DEFAULT_EMPLOYEES));
+      if (!state.logs) state.logs = {};
+      if (!state.repeatThreshold) state.repeatThreshold = 3;
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateTeamBadge();
+      const ind = document.getElementById('save-indicator');
+      if (ind) {
+        ind.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Salvando...`;
+        setTimeout(() => {
+          ind.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Sincronizado`;
+        }, 800);
+      }
+    }
+
+    function updateTeamBadge() {
+      document.getElementById('badge-team-count').textContent = state.employees.filter(e => e.active !== false).length;
+    }
+
+    function showToast(msg, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      el.className = `${type === 'error' ? 'bg-rose-600 text-white' : 'bg-slate-900 text-white border border-orange-500/40'} text-xs font-semibold px-4 py-2.5 rounded-xl shadow-elevated transition-all duration-300 opacity-0 translate-y-2`;
+      el.textContent = msg;
+      container.appendChild(el);
+      requestAnimationFrame(() => el.classList.remove('opacity-0', 'translate-y-2'));
+      setTimeout(() => {
+        el.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => el.remove(), 300);
+      }, 2600);
+    }
+
+    function switchTab(tabName) {
+      ['diario', 'relatorio', 'equipe', 'config'].forEach(t => {
+        const view = document.getElementById(`view-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabName) {
+          view.classList.remove('hidden');
+          btn.classList.remove('border-transparent', 'text-slate-500', 'font-medium');
+          btn.classList.add('border-brand-600', 'text-brand-600', 'font-bold');
+        } else {
+          view.classList.add('hidden');
+          btn.classList.remove('border-brand-600', 'text-brand-600', 'font-bold');
+          btn.classList.add('border-transparent', 'text-slate-500', 'font-medium');
+        }
+      });
+      if (tabName === 'diario') renderDailyView();
+      if (tabName === 'relatorio') renderReportView();
+      if (tabName === 'equipe') renderTeamView();
+      if (tabName === 'config') renderConfigView();
+    }
+
+    function getAct(id) { return state.activities.find(a => a.id === id) || null; }
+    function getInitials(name) {
+      const parts = name.trim().split(/\s+/);
+      if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    function getAvatarColor(name) {
+      let hash = 0;
+      for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+    }
+    function formatDateBR(iso) {
+      if (!iso) return '';
+      const [y, m, d] = iso.split('-');
+      return `${d}/${m}/${y}`;
+    }
+    function getWeekdayName(iso) {
+      if (!iso) return '';
+      const [y, m, d] = iso.split('-').map(Number);
+      return ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'][new Date(y, m - 1, d).getDay()];
+    }
+    function getShortWeekday(iso) {
+      if (!iso) return '';
+      const [y, m, d] = iso.split('-').map(Number);
+      return ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'][new Date(y, m - 1, d).getDay()];
+    }
+
+    function calculateStreaks(empId, dateStr) {
+      const dayEntry = (state.logs[dateStr] && state.logs[dateStr][empId]) || {};
+      const actsToday = [...new Set([dayEntry.m1, dayEntry.m2].filter(Boolean))];
+      if (actsToday.length === 0) return [];
+      const pastDates = Object.keys(state.logs).filter(d => d < dateStr).sort((a, b) => b.localeCompare(a));
+      const alerts = [];
+      actsToday.forEach(actId => {
+        const act = getAct(actId);
+        if (!act || act.family === 'ausencia') return;
+        let streak = 1;
+        for (let i = 0; i < pastDates.length; i++) {
+          const pastEntry = state.logs[pastDates[i]][empId];
+          if (pastEntry && (pastEntry.m1 === actId || pastEntry.m2 === actId)) streak++;
+          else break;
+        }
+        if (streak >= state.repeatThreshold) alerts.push(`${streak}º dia seg. em ${act.name}`);
+      });
+      return alerts;
+    }
+
+    function changeDateBy(days) {
+      const input = document.getElementById('daily-date');
+      const [y, m, d] = input.value.split('-').map(Number);
+      const dt = new Date(y, m - 1, d);
+      dt.setDate(dt.getDate() + days);
+      input.value = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+      renderDailyView();
+    }
+
+    function goToToday() {
+      const now = new Date();
+      document.getElementById('daily-date').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      renderDailyView();
+    }
+
+    function renderDailyView() {
+      document.getElementById('daily-weekday-label').textContent = getWeekdayName(document.getElementById('daily-date').value);
+      renderFamilyCards();
+      renderDailyTableOnly();
+    }
+
+    function toggleSectorCard(familyKey) {
+      const filterSelect = document.getElementById('daily-filter-status');
+      if (activeSectorCardFilter === familyKey) {
+        activeSectorCardFilter = null;
+        filterSelect.value = 'all';
+      } else {
+        activeSectorCardFilter = familyKey;
+        filterSelect.value = familyKey === 'pendentes' ? 'pending' : familyKey;
+      }
+      renderFamilyCards();
+      renderDailyTableOnly();
+    }
+
+    function renderFamilyCards() {
+      const dateStr = document.getElementById('daily-date').value;
+      const dayLogs = state.logs[dateStr] || {};
+      const activeEmps = state.employees.filter(e => e.active !== false);
+      const counts = { sorting: 0, bipagem: 0, carretas: 0, apoio: 0, ausencia: 0 };
+      let filledEmps = 0, totalAlerts = 0;
+
+      activeEmps.forEach(emp => {
+        const entry = dayLogs[emp.id] || {};
+        if (entry.m1 && entry.m2) filledEmps++;
+        if (calculateStreaks(emp.id, dateStr).length > 0) totalAlerts++;
+        [entry.m1, entry.m2].forEach(actId => {
+          const act = getAct(actId);
+          if (act && counts.hasOwnProperty(act.family)) counts[act.family]++;
+        });
+      });
+
+      const pct = activeEmps.length > 0 ? Math.round((filledEmps / activeEmps.length) * 100) : 0;
+      document.getElementById('daily-progress-badge').textContent = `${filledEmps}/${activeEmps.length} preenchidos (${pct}%)`;
+      document.getElementById('daily-progress-bar').style.width = `${pct}%`;
+
+      document.getElementById('daily-alerts-summary').innerHTML = totalAlerts > 0 ?
+        `<span class="inline-flex items-center gap-1.5 text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-lg font-bold"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>${totalAlerts} alerta(s) de repetição</span>` :
+        `<span class="text-slate-400 font-medium">Nenhum alerta crítico</span>`;
+
+      const cardsConfig = [
+        { key: 'sorting', title: 'Sorting', icon: '📦', count: counts.sorting, iconBg: 'bg-sky-100 text-sky-700' },
+        { key: 'bipagem', title: 'Bipagem', icon: '🏷️', count: counts.bipagem, iconBg: 'bg-indigo-100 text-indigo-700' },
+        { key: 'carretas', title: 'Carretas', icon: '🚛', count: counts.carretas, iconBg: 'bg-orange-100 text-orange-700' },
+        { key: 'apoio', title: 'Apoio', icon: '🛠️', count: counts.apoio, iconBg: 'bg-emerald-100 text-emerald-700' },
+        { key: 'ausencia', title: 'Ausências', icon: '🗓️', count: counts.ausencia, iconBg: 'bg-slate-200 text-slate-700' },
+        { key: 'pendentes', title: 'Pendentes', icon: '⏳', count: activeEmps.length - filledEmps, iconBg: 'bg-amber-100 text-amber-700' }
+      ];
+
+      document.getElementById('daily-family-cards').innerHTML = cardsConfig.map(c => {
+        const isActive = activeSectorCardFilter === c.key;
+        return `
+          <button onclick="toggleSectorCard('${c.key}')" class="text-left p-3.5 rounded-xl border ${isActive ? 'border-brand-500 ring-2 ring-brand-500/20 bg-orange-50/70' : 'border-slate-200 hover:border-orange-300 bg-white'} transition cursor-pointer flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[11px] font-bold text-slate-500">${c.title}</div>
+              <div class="text-xl font-extrabold text-brand-700 mt-0.5 tabular-nums">${c.count}</div>
+            </div>
+            <div class="w-9 h-9 rounded-xl ${c.iconBg} flex items-center justify-center text-base shrink-0">${c.icon}</div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function buildSelectOptionsHTML(selectedId) {
+      let html = `<option value="">-- Selecionar atividade --</option>`;
+      const items = state.activities.filter(a => a.active || a.id === selectedId);
+      items.forEach(act => {
+        const fam = FAMILY_META[act.family];
+        const emoji = fam ? fam.icon : '•';
+        html += `<option value="${act.id}" ${act.id === selectedId ? 'selected' : ''}>${emoji} ${act.name}</option>`;
+      });
+      return html;
+    }
+
+    function openEmployeeXRayFromDaily(empId) {
+      const dateStr = document.getElementById('daily-date').value;
+      const monthStr = dateStr ? dateStr.slice(0, 7) : document.getElementById('report-month').value;
+      document.getElementById('report-month').value = monthStr;
+      switchTab('relatorio');
+      document.getElementById('report-employee-select').value = empId;
+      renderIndividualXRay();
+      document.getElementById('individual-xray-panel').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeXRayPanel() {
+      document.getElementById('report-employee-select').value = '';
+      document.getElementById('individual-xray-panel').classList.add('hidden');
+    }
+
+    function renderDailyTableOnly() {
+      const dateStr = document.getElementById('daily-date').value;
+      const search = document.getElementById('daily-search').value.toLowerCase().trim();
+      const filterVal = document.getElementById('daily-filter-status').value;
+
+      if (['sorting', 'bipagem', 'carretas', 'apoio', 'ausencia'].includes(filterVal)) activeSectorCardFilter = filterVal;
+      else if (filterVal === 'pending') activeSectorCardFilter = 'pendentes';
+      else activeSectorCardFilter = null;
+      renderFamilyCards();
+
+      const dayLogs = state.logs[dateStr] || {};
+      const activeEmps = state.employees.filter(e => e.active !== false).sort((a, b) => a.name.localeCompare(b.name));
+      const tbody = document.getElementById('daily-table-body');
+      let rows = '', counter = 0;
+
+      activeEmps.forEach(emp => {
+        if (search && !emp.name.toLowerCase().includes(search)) return;
+        const entry = dayLogs[emp.id] || { m1: '', m2: '' };
+        const act1 = getAct(entry.m1), act2 = getAct(entry.m2);
+        const streaks = calculateStreaks(emp.id, dateStr);
+
+        if (filterVal === 'pending' && entry.m1 && entry.m2) return;
+        if (filterVal === 'alerts' && streaks.length === 0) return;
+        if (['sorting', 'bipagem', 'carretas', 'apoio', 'ausencia'].includes(filterVal)) {
+          if (!((act1 && act1.family === filterVal) || (act2 && act2.family === filterVal))) return;
+        }
+
+        counter++;
+        const style1 = act1 && FAMILY_META[act1.family] ? FAMILY_META[act1.family].selectClass : 'bg-white text-slate-700 border-slate-200';
+        const style2 = act2 && FAMILY_META[act2.family] ? FAMILY_META[act2.family].selectClass : 'bg-white text-slate-700 border-slate-200';
+        const badge = streaks.length > 0 ?
+          `<span class="inline-flex items-center gap-1.5 text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-1 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>${streaks[0]}</span>` :
+          `<span class="inline-flex items-center gap-1.5 text-xs text-slate-400 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>Regular</span>`;
+
+        rows += `
+          <tr class="group hover:bg-orange-50/30 transition-colors">
+            <td class="py-3 px-4 text-center text-xs font-bold text-slate-400 tabular-nums">${counter}</td>
+            <td class="py-3 px-4">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full ${getAvatarColor(emp.name)} font-display font-bold text-xs flex items-center justify-center shrink-0">${getInitials(emp.name)}</div>
+                <div>
+                  <div class="font-bold text-slate-900 text-sm">${emp.name}</div>
+                  <button type="button" onclick="openEmployeeXRayFromDaily('${emp.id}')" class="text-[11px] font-bold text-brand-600 hover:text-brand-700 hover:underline cursor-pointer inline-flex items-center gap-1">
+                    Ver Raio-X no mês →
+                  </button>
+                </div>
+              </div>
+            </td>
+            <td class="py-3 px-4"><select onchange="handleShiftChange('${emp.id}', 'm1', this.value)" class="clean-select w-full border rounded-xl px-3.5 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer transition ${style1}">${buildSelectOptionsHTML(entry.m1)}</select></td>
+            <td class="py-3 px-1 text-center"><button onclick="copyFirstToSecondSingle('${emp.id}')" title="Copiar 1º para 2º" class="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-orange-50 rounded-lg transition cursor-pointer"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></button></td>
+            <td class="py-3 px-4"><select onchange="handleShiftChange('${emp.id}', 'm2', this.value)" class="clean-select w-full border rounded-xl px-3.5 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer transition ${style2}">${buildSelectOptionsHTML(entry.m2)}</select></td>
+            <td class="py-3 px-4">${badge}</td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = rows || `<tr><td colspan="6" class="py-10 text-center text-slate-400">Nenhum colaborador encontrado.</td></tr>`;
+    }
+
+    function handleShiftChange(empId, moment, actId) {
+      const dateStr = document.getElementById('daily-date').value;
+      if (!state.logs[dateStr]) state.logs[dateStr] = {};
+      if (!state.logs[dateStr][empId]) state.logs[dateStr][empId] = { m1: '', m2: '' };
+      state.logs[dateStr][empId][moment] = actId;
+      const act = getAct(actId);
+      if (moment === 'm1' && act && act.family === 'ausencia' && !state.logs[dateStr][empId].m2) state.logs[dateStr][empId].m2 = actId;
+      saveState();
+      renderDailyTableOnly();
+    }
+
+    function copyFirstToSecondSingle(empId) {
+      const dateStr = document.getElementById('daily-date').value;
+      const entry = state.logs[dateStr] && state.logs[dateStr][empId];
+      if (!entry || !entry.m1) { showToast('Selecione primeiro o 1º Momento.', 'error'); return; }
+      entry.m2 = entry.m1;
+      saveState();
+      renderDailyTableOnly();
+    }
+
+    function replicateAllFirstToSecond() {
+      const dateStr = document.getElementById('daily-date').value;
+      const dayLogs = state.logs[dateStr] || {};
+      let updated = 0;
+      Object.keys(dayLogs).forEach(empId => {
+        if (dayLogs[empId].m1 && !dayLogs[empId].m2) { dayLogs[empId].m2 = dayLogs[empId].m1; updated++; }
+      });
+      if (updated === 0) { showToast('Nenhum campo vazio no 2º Momento.'); return; }
+      saveState();
+      renderDailyTableOnly();
+      showToast(`${updated} preenchido(s)!`);
+    }
+
+    function copyPreviousDay() {
+      const currentStr = document.getElementById('daily-date').value;
+      const prevDates = Object.keys(state.logs).filter(d => d < currentStr && Object.keys(state.logs[d]).length > 0).sort((a, b) => b.localeCompare(a));
+      if (prevDates.length === 0) { showToast('Sem registros anteriores.', 'error'); return; }
+      openConfirmModal('Copiar Dia Anterior', `Copiar escala de ${formatDateBR(prevDates[0])}?`, () => {
+        state.logs[currentStr] = JSON.parse(JSON.stringify(state.logs[prevDates[0]]));
+        saveState();
+        renderDailyView();
+        showToast('Escala copiada!');
+      });
+    }
+
+    // =====================================================================
+    // FUNÇÕES DO GERADOR DE ESCALA WHATSAPP
+    // =====================================================================
+    const WA_FIELDS = [
+      'wa-volumetria', 'wa-rotas', 'wa-saudacao', 'wa-carretas', 'wa-samu',
+      'wa-abast-02', 'wa-abast-03', 'wa-abast-04', 'wa-abast-05', 'wa-abast-06',
+      'wa-b02', 'wa-s02', 'wa-b03', 'wa-s03', 'wa-b04', 'wa-s04',
+      'wa-b05', 'wa-s05', 'wa-b06', 'wa-s06',
+      'wa-5s', 'wa-volumoso', 'wa-gaiolas', 'wa-concertos', 'wa-letras', 'wa-moto'
+    ];
+
+    function openWhatsAppModal() {
+      const dateStr = document.getElementById('daily-date').value;
+      const [, m, d] = dateStr.split('-');
+      document.getElementById('wa-date').value = `${d}/${m}`;
+
+      const savedWa = localStorage.getItem(WA_STORAGE_KEY);
+      if (savedWa) {
+        try {
+          const parsed = JSON.parse(savedWa);
+          WA_FIELDS.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && parsed[id] !== undefined) el.value = parsed[id];
+          });
+        } catch(e) {}
+      } else {
+        document.getElementById('wa-volumetria').value = '24 Mil';
+        document.getElementById('wa-rotas').value = '210';
+        document.getElementById('wa-letras').value = 'A-1 até E-10';
+        document.getElementById('wa-moto').value = 'A-1 até A-20';
+      }
+
+      importFromDailyMoment('m1', true);
+      updateWhatsAppPreview();
+      const modal = document.getElementById('whatsapp-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeWhatsAppModal() {
+      const modal = document.getElementById('whatsapp-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function importFromDailyMoment(momentKey, silent = false) {
+      const dateStr = document.getElementById('daily-date').value;
+      const dayLogs = state.logs[dateStr] || {};
+      const activeEmps = state.employees.filter(e => e.active !== false);
+
+      const groups = {
+        carretas: [],
+        samu: [],
+        volumoso: [],
+        conserto: [],
+        cincoS: [],
+        gaiolas: []
+      };
+
+      activeEmps.forEach(emp => {
+        const entry = dayLogs[emp.id];
+        if (!entry || !entry[momentKey]) return;
+        const act = getAct(entry[momentKey]);
+        if (!act) return;
+        const nameLower = act.name.toLowerCase();
+        const shortName = emp.name.split(' ')[0];
+
+        if (nameLower.includes('carreta')) groups.carretas.push(shortName);
+        else if (nameLower.includes('samu')) groups.samu.push(shortName);
+        else if (nameLower.includes('volumoso')) groups.volumoso.push(shortName);
+        else if (nameLower.includes('conserto') || nameLower.includes('concerto')) groups.conserto.push(shortName);
+        else if (nameLower === '5s') groups.cincoS.push(shortName);
+        else if (nameLower.includes('gaiola')) groups.gaiolas.push(shortName);
+      });
+
+      if (groups.carretas.length > 0) document.getElementById('wa-carretas').value = groups.carretas.join(' / ');
+      if (groups.samu.length > 0) document.getElementById('wa-samu').value = groups.samu.join(' / ');
+      if (groups.volumoso.length > 0) document.getElementById('wa-volumoso').value = groups.volumoso.join(' / ');
+      if (groups.conserto.length > 0) document.getElementById('wa-concertos').value = groups.conserto.join(' / ');
+      if (groups.cincoS.length > 0) document.getElementById('wa-5s').value = groups.cincoS.join(' / ');
+      if (groups.gaiolas.length > 0) document.getElementById('wa-gaiolas').value = groups.gaiolas.join(' / ');
+
+      updateWhatsAppPreview();
+      if (!silent) showToast(`Nomes do ${momentKey === 'm1' ? '1º' : '2º'} Momento importados!`);
+    }
+
+    function formatBulletLines(rawText) {
+      const lines = rawText.split('\n').map(l => l.trim()).filter(Boolean);
+      if (lines.length === 0) return '- ';
+      return lines.map(l => `- ${l}`).join('\n');
+    }
+
+    function updateWhatsAppPreview() {
+      const toSave = {};
+      WA_FIELDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) toSave[id] = el.value;
+      });
+      localStorage.setItem(WA_STORAGE_KEY, JSON.stringify(toSave));
+
+      const dt = document.getElementById('wa-date').value || '17/11';
+      const saudacao = document.getElementById('wa-saudacao').value || 'Boa noite, pessoal!';
+      const volumetria = document.getElementById('wa-volumetria').value || '';
+      const rotas = document.getElementById('wa-rotas').value || '';
+      const carretas = document.getElementById('wa-carretas').value || '';
+      const samu = document.getElementById('wa-samu').value || '';
+
+      const ab02 = document.getElementById('wa-abast-02').value || '';
+      const ab03 = document.getElementById('wa-abast-03').value || '';
+      const ab04 = document.getElementById('wa-abast-04').value || '';
+      const ab05 = document.getElementById('wa-abast-05').value || '';
+      const ab06 = document.getElementById('wa-abast-06').value || '';
+
+      const b02 = formatBulletLines(document.getElementById('wa-b02').value);
+      const s02 = formatBulletLines(document.getElementById('wa-s02').value);
+      const b03 = formatBulletLines(document.getElementById('wa-b03').value);
+      const s03 = formatBulletLines(document.getElementById('wa-s03').value);
+      const b04 = formatBulletLines(document.getElementById('wa-b04').value);
+      const s04 = formatBulletLines(document.getElementById('wa-s04').value);
+      const b05 = formatBulletLines(document.getElementById('wa-b05').value);
+      const s05 = formatBulletLines(document.getElementById('wa-s05').value);
+      const b06 = formatBulletLines(document.getElementById('wa-b06').value);
+      const s06 = formatBulletLines(document.getElementById('wa-s06').value);
+
+      const cincoS = document.getElementById('wa-5s').value || '';
+      const volumoso = document.getElementById('wa-volumoso').value || '';
+      const gaiolas = document.getElementById('wa-gaiolas').value || '';
+      const concertos = document.getElementById('wa-concertos').value || '';
+      const letras = document.getElementById('wa-letras').value || '';
+      const moto = document.getElementById('wa-moto').value || '';
+
+      const message = `🏆 *ESCALA DE PROCESSAMENTO  📆${dt}*
+${saudacao} 🙌🏼
+Espero que estejam todos bem.
+
+Segue nossa escala de processamento de hoje. Conto com o compromisso e a parceria de todos para realizarmos uma excelente operação. 
+👇🏻
+🎯 *VOLUMETRIA:* ${volumetria}
+🚛 *ROTAS:* ${rotas}
+━━━━━━━━━━━━━━
+🚚 *CARRETAS*
+${carretas}
+
+🚑 *SAMU*
+${samu}
+━━━━━━━━━━━━━━
+📦*ABASTECIMENTO*
+━━━━━━━━━━━━━━
+*Bancada 02*: ${ab02}
+*Bancada 03*: ${ab03}
+*Bancada 04*: ${ab04}
+*Bancada 05*: ${ab05}
+*Bancada 06* ${ab06}
+━━━━━━━━━━━━━━
+ 🔹 *BANCADA* 0️⃣2️⃣
+━━━━━━━━━━━━━━
+${b02}
+
+🔄 *SORTING — BANCADA 02* 
+${s02}
+━━━━━━━━━━━━━━
+ 🔹 *BANCADA* 0️⃣3️⃣
+━━━━━━━━━━━━━━
+${b03}
+
+🔄 *SORTING — BANCADA 03* 
+${s03}
+━━━━━━━━━━━━━━
+🔹 *BANCADA* 0️⃣4️⃣
+━━━━━━━━━━━━━━
+${b04}
+
+🔄 *SORTING — BANCADA 04*
+${s04}
+━━━━━━━━━━━━━━
+🔹 *BANCADA* 0️⃣5️⃣
+━━━━━━━━━━━━━━
+${b05}
+
+🔄 *SORTING — BANCADA 05*
+${s05}
+━━━━━━━━━━━━━━
+🔹 *BANCADA* 0️⃣6️⃣
+━━━━━━━━━━━━━━
+${b06}
+
+🔄 *SORTING — BANCADA 06*
+${s06}
+*========================*
+🧹 *5s*
+- ${cincoS}
+
+⁠📦 *VOLUMOSO*
+- ${volumoso}
+
+🛒 *PUXAR GAIOLAS*
+- ${gaiolas}
+
+🔧 *CONCERTOS*
+- ${concertos}
+
+🔤 *LETRAS*
+- ${letras}
+
+🏍️ *MOTO*
+- ${moto}`;
+
+      document.getElementById('wa-preview-box').value = message;
+    }
+
+    function copyWhatsAppText() {
+      const text = document.getElementById('wa-preview-box').value;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Escala copiada! Basta colar no grupo do WhatsApp.');
+      }).catch(() => {
+        const box = document.getElementById('wa-preview-box');
+        box.select();
+        document.execCommand('copy');
+        showToast('Escala copiada!');
+      });
+    }
+
+    function sendDirectWhatsApp() {
+      const text = encodeURIComponent(document.getElementById('wa-preview-box').value);
+      window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+    }
+
+    // RELATÓRIO & RAIO-X
+    function renderActivityBadge(act) {
+      if (!act) return `<span class="text-slate-400">—</span>`;
+      const fam = FAMILY_META[act.family] || FAMILY_META.ausencia;
+      return `<span class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-md border ${fam.pillClass}">${fam.icon} ${act.name}</span>`;
+    }
+
+    function renderReportView() {
+      const selectEl = document.getElementById('report-employee-select');
+      const val = selectEl.value;
+      const sorted = [...state.employees].sort((a, b) => a.name.localeCompare(b.name));
+      selectEl.innerHTML = `<option value="">-- Selecione --</option>` +
+        sorted.map(e => `<option value="${e.id}" ${e.id === val ? 'selected' : ''}>${e.name}</option>`).join('');
+      renderConsolidatedTable();
+      renderIndividualXRay();
+    }
+
+    function openEmployeeXRay(empId) {
+      document.getElementById('report-employee-select').value = empId;
+      renderIndividualXRay();
+      document.getElementById('individual-xray-panel').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function renderIndividualXRay() {
+      const empId = document.getElementById('report-employee-select').value;
+      const monthStr = document.getElementById('report-month').value;
+      const panel = document.getElementById('individual-xray-panel');
+      if (!empId) { panel.classList.add('hidden'); return; }
+
+      const emp = state.employees.find(e => e.id === empId);
+      if (!emp) return;
+      panel.classList.remove('hidden');
+      document.getElementById('xray-employee-name').textContent = emp.name;
+      document.getElementById('xray-initials').textContent = getInitials(emp.name);
+
+      const dates = Object.keys(state.logs).filter(d => d.startsWith(monthStr)).sort();
+      const counts = {}; let total = 0, work = 0; const timeline = [];
+
+      dates.forEach(d => {
+        const entry = state.logs[d][empId];
+        if (!entry || (!entry.m1 && !entry.m2)) return;
+        const a1 = getAct(entry.m1), a2 = getAct(entry.m2);
+        if (a1) {
+          if (!counts[a1.id]) counts[a1.id] = { act: a1, qty: 0 };
+          counts[a1.id].qty++;
+          total++;
+          if (a1.family !== 'ausencia') work++;
+        }
+        if (a2) {
+          if (!counts[a2.id]) counts[a2.id] = { act: a2, qty: 0 };
+          counts[a2.id].qty++;
+          total++;
+          if (a2.family !== 'ausencia') work++;
+        }
+        timeline.push({ date: formatDateBR(d), weekday: getWeekdayName(d), a1, a2 });
+      });
+
+      const sortedCounts = Object.values(counts).sort((a, b) => b.qty - a.qty);
+      document.getElementById('xray-kpi-badges').innerHTML = `
+        <div class="bg-orange-50 border border-orange-200 px-3 py-1.5 rounded-xl text-xs"><span class="text-slate-600">Turnos no mês:</span> <strong class="text-brand-700 ml-1">${work}</strong></div>
+        <div class="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-xs"><span class="text-slate-500">Principal:</span> <strong class="text-slate-900 ml-1">${sortedCounts.length ? sortedCounts[0].act.name : 'Nenhum'}</strong></div>
+      `;
+
+      document.getElementById('xray-bars-list').innerHTML = sortedCounts.length ? sortedCounts.map(({ act, qty }) => {
+        const pct = Math.round((qty / total) * 100);
+        const fam = FAMILY_META[act.family] || FAMILY_META.ausencia;
+        return `
+          <div>
+            <div class="flex justify-between items-center text-xs font-bold text-slate-800 mb-1.5 tabular-nums">
+              <span>${fam.icon} ${act.name}</span>
+              <span class="text-slate-600">${qty} ${qty === 1 ? 'turno' : 'turnos'} <span class="text-slate-400 font-semibold">(${pct}%)</span></span>
+            </div>
+            <div class="w-full h-2 bg-slate-200/80 rounded-full overflow-hidden">
+              <div class="h-full ${fam.barClass} rounded-full" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('') : '<p class="text-xs text-slate-400">Sem registros no mês.</p>';
+
+      document.getElementById('xray-timeline-body').innerHTML = timeline.length ? timeline.map(t => `
+        <tr class="hover:bg-orange-50/30">
+          <td class="py-2.5 px-3.5 font-bold text-slate-900 tabular-nums">${t.date}</td>
+          <td class="py-2.5 px-3.5 text-slate-500">${t.weekday}</td>
+          <td class="py-2.5 px-3.5">${renderActivityBadge(t.a1)}</td>
+          <td class="py-2.5 px-3.5">${renderActivityBadge(t.a2)}</td>
+        </tr>
+      `).join('') : '<tr><td colspan="4" class="py-4 text-center text-slate-400">Sem histórico neste mês.</td></tr>';
+    }
+
+    function renderConsolidatedTable() {
+      const monthStr = document.getElementById('report-month').value;
+      const search = document.getElementById('report-search').value.toLowerCase().trim();
+      const dates = Object.keys(state.logs).filter(d => d.startsWith(monthStr)).sort();
+      const acts = state.activities.filter(a => a.active);
+
+      document.getElementById('consolidated-thead').innerHTML = `
+        <tr>
+          <th class="py-3.5 px-4 sticky left-0 bg-orange-50 z-10 min-w-[210px]">Colaborador</th>
+          <th class="py-3.5 px-3 text-center bg-orange-100/80 text-brand-700">Trabalhados</th>
+          ${acts.map(a => `<th class="py-3.5 px-3 text-center whitespace-nowrap">${a.name}</th>`).join('')}
+        </tr>
+      `;
+
+      const sorted = [...state.employees].filter(e => !search || e.name.toLowerCase().includes(search)).sort((a, b) => a.name.localeCompare(b.name));
+      document.getElementById('consolidated-tbody').innerHTML = sorted.length ? sorted.map(emp => {
+        const counts = {}; let work = 0;
+        dates.forEach(d => {
+          const entry = state.logs[d][emp.id];
+          if (!entry) return;
+          [entry.m1, entry.m2].forEach(id => {
+            if (!id) return;
+            counts[id] = (counts[id] || 0) + 1;
+            const a = getAct(id);
+            if (a && a.family !== 'ausencia') work++;
+          });
+        });
+        return `
+          <tr class="hover:bg-orange-50/30">
+            <td class="py-2.5 px-4 sticky left-0 bg-white font-bold text-slate-900 border-r border-slate-100">
+              <button onclick="openEmployeeXRay('${emp.id}')" class="hover:text-brand-600 hover:underline cursor-pointer text-left">${emp.name}</button>
+            </td>
+            <td class="py-2.5 px-3 text-center font-extrabold text-brand-700 bg-orange-50/60">${work}</td>
+            ${acts.map(a => `<td class="py-2.5 px-3 text-center ${counts[a.id] ? 'font-bold text-slate-900' : 'text-slate-300'}">${counts[a.id] || '·'}</td>`).join('')}
+          </tr>
+        `;
+      }).join('') : `<tr><td colspan="${acts.length + 2}" class="py-8 text-center text-slate-400">Nenhum registro.</td></tr>`;
+    }
+
+    function exportMonthlyCSV() {
+      const monthStr = document.getElementById('report-month').value;
+      const dates = Object.keys(state.logs).filter(d => d.startsWith(monthStr)).sort();
+      if (!dates.length) { showToast('Sem registros para exportar.', 'error'); return; }
+
+      let csv = '\uFEFFData;Dia;Colaborador;1º Momento;2º Momento\n';
+      state.employees.forEach(emp => {
+        dates.forEach(d => {
+          const e = state.logs[d][emp.id];
+          if (e && (e.m1 || e.m2)) {
+            csv += `${formatDateBR(d)};${getWeekdayName(d)};"${emp.name}";"${getAct(e.m1)?.name || ''}";"${getAct(e.m2)?.name || ''}"\n`;
+          }
+        });
+      });
+
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+      a.download = `Relatorio_${monthStr}.csv`;
+      a.click();
+      showToast('CSV exportado!');
+    }
+
+    // EQUIPE
+    function addSingleEmployee(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-emp-name').value.trim();
+      if (!name) return;
+      state.employees.push({ id: 'emp_' + Date.now(), name, role: document.getElementById('new-emp-role').value.trim() || 'Operação', active: true });
+      document.getElementById('new-emp-name').value = '';
+      saveState();
+      renderTeamView();
+      showToast('Colaborador cadastrado!');
+    }
+
+    function addBulkEmployees() {
+      const lines = document.getElementById('bulk-emp-names').value.split('\n').map(l => l.trim()).filter(Boolean);
+      if (!lines.length) return;
+      let added = 0;
+      lines.forEach(name => {
+        if (!state.employees.some(e => e.name.toLowerCase() === name.toLowerCase())) {
+          state.employees.push({ id: 'emp_' + Date.now() + Math.random(), name, role: 'Operação', active: true });
+          added++;
+        }
+      });
+      document.getElementById('bulk-emp-names').value = '';
+      saveState();
+      renderTeamView();
+      showToast(`${added} importado(s)!`);
+    }
+
+    function renderTeamView() {
+      const search = document.getElementById('team-search').value.toLowerCase().trim();
+      const sorted = [...state.employees].filter(e => !search || e.name.toLowerCase().includes(search)).sort((a, b) => a.name.localeCompare(b.name));
+      document.getElementById('team-table-body').innerHTML = sorted.map(emp => `
+        <tr class="hover:bg-orange-50/30">
+          <td class="py-3 px-4 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full ${getAvatarColor(emp.name)} font-display font-bold text-xs flex items-center justify-center shrink-0">${getInitials(emp.name)}</div>
+            <span class="font-bold text-slate-900">${emp.name}</span>
+          </td>
+          <td class="py-3 px-4">
+            <button type="button" onclick="openEmployeeXRayFromDaily('${emp.id}')" class="text-xs font-bold text-brand-600 hover:text-brand-700 hover:underline cursor-pointer">
+              Ver Raio-X no mês →
+            </button>
+          </td>
+          <td class="py-3 px-4"><span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full ${emp.active !== false ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-500'}">${emp.active !== false ? 'Ativo' : 'Inativo'}</span></td>
+          <td class="py-3 px-4 text-right space-x-1">
+            <button onclick="editEmpPrompt('${emp.id}')" class="text-xs font-semibold text-slate-700 hover:text-brand-700 bg-slate-100 hover:bg-orange-50 px-2.5 py-1.5 rounded-lg transition cursor-pointer">Editar</button>
+            <button onclick="toggleEmp('${emp.id}')" class="text-xs font-semibold text-slate-700 hover:text-brand-700 bg-slate-100 hover:bg-orange-50 px-2.5 py-1.5 rounded-lg transition cursor-pointer">${emp.active !== false ? 'Inativar' : 'Ativar'}</button>
+            <button onclick="deleteEmp('${emp.id}')" class="text-xs font-semibold text-rose-600 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg transition cursor-pointer">Excluir</button>
+          </td>
+        </tr>
+      `).join('') || `<tr><td colspan="4" class="py-8 text-center text-slate-400">Nenhum colaborador.</td></tr>`;
+    }
+
+    function editEmpPrompt(id) {
+      const emp = state.employees.find(e => e.id === id);
+      if (!emp) return;
+      openInputModal('Editar Nome', 'Novo nome:', emp.name, val => {
+        if (val?.trim()) { emp.name = val.trim(); saveState(); renderTeamView(); showToast('Atualizado!'); }
+      });
+    }
+
+    function toggleEmp(id) {
+      const emp = state.employees.find(e => e.id === id);
+      if (emp) { emp.active = emp.active === false ? true : false; saveState(); renderTeamView(); showToast('Status alterado.'); }
+    }
+
+    function deleteEmp(id) {
+      openConfirmModal('Excluir', 'Deseja excluir permanentemente?', () => {
+        state.employees = state.employees.filter(e => e.id !== id);
+        saveState();
+        renderTeamView();
+        showToast('Removido.');
+      });
+    }
+
+    // CONFIG / ATIVIDADES
+    function addActivityType(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-act-name').value.trim();
+      if (!name) return;
+      state.activities.push({ id: 'act_' + Date.now(), name, family: document.getElementById('new-act-family').value, active: true });
+      document.getElementById('new-act-name').value = '';
+      saveState();
+      renderConfigView();
+      showToast('Atividade adicionada!');
+    }
+
+    function updateRepeatThreshold() {
+      const v = parseInt(document.getElementById('config-repeat-threshold').value, 10);
+      if (v >= 2 && v <= 15) { state.repeatThreshold = v; saveState(); showToast('Regra de alerta atualizada!'); }
+    }
+
+    function renderConfigView() {
+      document.getElementById('config-repeat-threshold').value = state.repeatThreshold;
+      document.getElementById('activities-table-body').innerHTML = state.activities.map(act => {
+        const fam = FAMILY_META[act.family] || FAMILY_META.ausencia;
+        return `
+          <tr class="hover:bg-orange-50/30">
+            <td class="py-3 px-4 font-bold text-slate-900">${fam.icon} ${act.name}</td>
+            <td class="py-3 px-4"><span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${fam.pillClass}">${fam.label}</span></td>
+            <td class="py-3 px-4"><span class="text-xs font-bold ${act.active ? 'text-emerald-600' : 'text-slate-400'}">${act.active ? 'Ativa' : 'Oculta'}</span></td>
+            <td class="py-3 px-4 text-right space-x-1">
+              <button onclick="renameActPrompt('${act.id}')" class="text-xs font-semibold text-slate-700 hover:text-brand-700 bg-slate-100 hover:bg-orange-50 px-2.5 py-1.5 rounded-lg transition cursor-pointer">Renomear</button>
+              <button onclick="toggleAct('${act.id}')" class="text-xs font-semibold text-slate-700 hover:text-brand-700 bg-slate-100 hover:bg-orange-50 px-2.5 py-1.5 rounded-lg transition cursor-pointer">${act.active ? 'Desativar' : 'Ativar'}</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renameActPrompt(id) {
+      const act = getAct(id);
+      if (!act) return;
+      openInputModal('Renomear', 'Novo nome:', act.name, val => {
+        if (val?.trim()) { act.name = val.trim(); saveState(); renderConfigView(); showToast('Renomeado!'); }
+      });
+    }
+
+    function toggleAct(id) {
+      const act = getAct(id);
+      if (act) { act.active = !act.active; saveState(); renderConfigView(); showToast('Status alterado.'); }
+    }
+
+    // MODAL & BACKUP
+    let modalCb = null;
+    function openConfirmModal(title, msg, cb) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-message').textContent = msg;
+      document.getElementById('modal-input-wrapper').classList.add('hidden');
+      modalCb = cb;
+      const m = document.getElementById('custom-modal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function openInputModal(title, msg, def, cb) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-message').textContent = msg;
+      const wrap = document.getElementById('modal-input-wrapper');
+      const input = document.getElementById('modal-input');
+      wrap.classList.remove('hidden'); input.value = def || '';
+      modalCb = () => cb(input.value);
+      const m = document.getElementById('custom-modal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+      input.focus();
+    }
+    function closeModal() {
+      const m = document.getElementById('custom-modal');
+      m.classList.add('hidden'); m.classList.remove('flex');
+      modalCb = null;
+    }
+    document.getElementById('modal-confirm-btn').addEventListener('click', () => { if (modalCb) modalCb(); closeModal(); });
+
+    function exportBackupJSON() {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' }));
+      a.download = `Backup_Rotatividade_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      showToast('Backup salvo!');
+    }
+
+    function importBackupJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = evt => {
+        try {
+          state = JSON.parse(evt.target.result);
+          saveState();
+          renderDailyView();
+          showToast('Backup restaurado com sucesso!');
+        } catch(err) { showToast('Arquivo inválido.', 'error'); }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+  </script>
+</body>
+</html>
