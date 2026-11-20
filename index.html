@@ -4,12 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CONTROLE DE ROTATIVIDADE — Gestão Diária de Escala</title>
-  <!-- Tailwind CSS -->
+  <!-- Ícone Personalizado (SVG em Laranja) -->
+  <link id="dynamic-favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='28' fill='%23EA580C'/%3E%3Cpath d='M64 28a36 36 0 0 1 32.8 21.4l7.2-5.4v22H82l7.6-5.7A24 24 0 0 0 42.6 49l-10.4-6.8A36 36 0 0 1 64 28zm35.8 57.8A36 36 0 0 1 31.2 78.6L24 84V62h22l-7.6 5.7A24 24 0 0 0 85.4 79l10.4 6.8z' fill='%23FFFFFF'/%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='28' fill='%23EA580C'/%3E%3Cpath d='M64 28a36 36 0 0 1 32.8 21.4l7.2-5.4v22H82l7.6-5.7A24 24 0 0 0 42.6 49l-10.4-6.8A36 36 0 0 1 64 28zm35.8 57.8A36 36 0 0 1 31.2 78.6L24 84V62h22l-7.6 5.7A24 24 0 0 0 85.4 79l10.4 6.8z' fill='%23FFFFFF'/%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#EA580C" />
+  <script>
+    (function () {
+      const iconHref = document.getElementById('dynamic-favicon').href;
+      const manifest = {
+        name: 'CONTROLE DE ROTATIVIDADE',
+        short_name: 'Rotatividade',
+        start_url: './',
+        display: 'standalone',
+        background_color: '#FFFFFF',
+        theme_color: '#EA580C',
+        icons: [
+          { src: iconHref, sizes: '128x128', type: 'image/svg+xml', purpose: 'any' }
+        ]
+      };
+      const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+      const link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = URL.createObjectURL(blob);
+      document.head.appendChild(link);
+    })();
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Fonte Plus Jakarta Sans & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -30,8 +53,8 @@
             }
           },
           boxShadow: {
-            'soft': '0 4px 20px -2px rgba(15, 23, 42, 0.06)',
-            'elevated': '0 12px 28px -6px rgba(15, 23, 42, 0.12), 0 4px 12px -4px rgba(234, 88, 12, 0.08)',
+            'soft': '0 4px 20px -2px rgba(15, 23, 42, 0.05)',
+            'elevated': '0 14px 32px -8px rgba(15, 23, 42, 0.12), 0 4px 12px -4px rgba(234, 88, 12, 0.1)',
           }
         }
       }
@@ -47,29 +70,17 @@
     h1, h2, h3, .font-display {
       font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
     }
-    .tabular-nums {
-      font-variant-numeric: tabular-nums;
-    }
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #CBD5E1;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94A3B8;
-    }
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
     select.clean-select {
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23EA580C' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-      background-position: right 0.75rem center;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23EA580C' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.7rem center;
       background-repeat: no-repeat;
       background-size: 1.15em 1.15em;
-      padding-right: 2.25rem;
+      padding-right: 2.2rem;
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
@@ -84,51 +95,48 @@
 <body class="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900 selection:bg-brand-600 selection:text-white">
 
   <!-- ===================================================================== -->
-  <!-- TELA DE LOGIN APENAS COM SENHA                                        -->
+  <!-- TELA DE LOGIN                                                         -->
   <!-- ===================================================================== -->
   <div id="login-screen" class="fixed inset-0 bg-white z-50 flex flex-col justify-between p-6 md:p-12 overflow-y-auto">
-    <!-- Topo esquerdo -->
     <div class="flex items-center gap-2.5">
       <span class="text-brand-600 font-display font-extrabold text-sm sm:text-base tracking-tight uppercase">CONTROLE DE ROTATIVIDADE</span>
       <span class="bg-brand-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">Gestão Diária de Escala</span>
     </div>
 
-    <!-- Conteúdo Central: 2 Colunas -->
     <div class="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center my-auto py-8">
-      <!-- Coluna Esquerda: Ilustração Estilizada -->
       <div class="lg:col-span-7 flex justify-center">
-        <div class="relative w-full max-w-lg bg-orange-50/50 border border-orange-100 p-8 rounded-3xl flex flex-col items-center justify-center">
-          <svg class="w-full h-auto max-h-[340px]" viewBox="0 0 500 350" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="80" y="80" width="120" height="220" rx="4" stroke="#FED7AA" stroke-width="8" fill="#FFF"/>
-            <path d="M80 130H200M80 180H200M80 230H200M120 80V300M160 80V300" stroke="#FFEDD5" stroke-width="3"/>
-            <rect x="95" y="95" width="25" height="25" rx="3" fill="#FED7AA"/>
-            <rect x="135" y="100" width="30" height="20" rx="3" fill="#FFEDD5"/>
-            <rect x="100" y="145" width="35" height="25" rx="3" fill="#FDBA74"/>
-            <rect x="145" y="150" width="25" height="20" rx="3" fill="#FED7AA"/>
-            <rect x="220" y="210" width="180" height="90" rx="6" fill="#FFFFFF" stroke="#FED7AA" stroke-width="4"/>
-            <rect x="270" y="140" width="90" height="65" rx="6" fill="#FFEDD5"/>
-            <rect x="280" y="150" width="70" height="45" rx="3" fill="#FFF7ED"/>
-            <path d="M305 205H335V215H305V205Z" fill="#EA580C"/>
-            <circle cx="310" cy="172" r="6" fill="#EA580C"/>
-            <circle cx="315" cy="100" r="22" fill="#FDBA74"/>
-            <path d="M293 115C293 103.4 302.4 94 314 94H316C327.6 94 337 103.4 337 115V135H293V115Z" fill="#1E293B"/>
-            <path d="M290 135H340V220H290V135Z" fill="#1E293B"/>
-            <rect x="302" y="215" width="12" height="75" fill="#334155"/>
-            <rect x="318" y="215" width="12" height="75" fill="#334155"/>
-            <rect x="298" y="285" width="18" height="10" rx="3" fill="#EA580C"/>
-            <rect x="316" y="285" width="18" height="10" rx="3" fill="#EA580C"/>
-            <rect x="400" y="120" width="35" height="25" rx="4" fill="#EA580C" fill-opacity="0.12"/>
-            <path d="M410 130H425M410 135H420" stroke="#EA580C" stroke-width="2" stroke-linecap="round"/>
-            <rect x="420" y="70" width="30" height="25" rx="4" fill="#FFEDD5"/>
-            <circle cx="435" cy="82" r="3" fill="#10B981"/>
+        <div class="relative w-full max-w-lg bg-gradient-to-br from-orange-50 via-white to-amber-50/60 border border-orange-100 p-8 rounded-3xl shadow-soft flex flex-col items-center justify-center">
+          <svg class="w-full h-auto max-h-[320px]" viewBox="0 0 500 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="75" y="75" width="125" height="220" rx="12" fill="#FFFFFF" stroke="#FED7AA" stroke-width="4"/>
+            <rect x="92" y="96" width="90" height="14" rx="7" fill="#FFEDD5"/>
+            <rect x="92" y="122" width="65" height="10" rx="5" fill="#EA580C" fill-opacity="0.25"/>
+            <rect x="92" y="148" width="90" height="36" rx="8" fill="#FFF7ED" stroke="#FDBA74" stroke-width="2"/>
+            <circle cx="112" cy="166" r="8" fill="#EA580C"/>
+            <rect x="128" y="161" width="42" height="10" rx="5" fill="#FDBA74"/>
+            <rect x="92" y="196" width="90" height="36" rx="8" fill="#F0F9FF" stroke="#BAE6FD" stroke-width="2"/>
+            <circle cx="112" cy="214" r="8" fill="#0284C7"/>
+            <rect x="128" y="209" width="42" height="10" rx="5" fill="#7DD3FC"/>
+            <rect x="92" y="244" width="90" height="36" rx="8" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="2"/>
+            <circle cx="112" cy="262" r="8" fill="#4F46E5"/>
+            <rect x="128" y="257" width="42" height="10" rx="5" fill="#A5B4FC"/>
+
+            <path d="M225 170C250 135 280 135 305 170" stroke="#EA580C" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 6"/>
+            <path d="M297 166L306 171L301 180" stroke="#EA580C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <rect x="318" y="90" width="115" height="180" rx="16" fill="#FFFFFF" stroke="#FDBA74" stroke-width="3"/>
+            <circle cx="375" cy="138" r="26" fill="#FFF7ED" stroke="#EA580C" stroke-width="3"/>
+            <path d="M365 138L372 145L386 131" stroke="#EA580C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="336" y="182" width="78" height="10" rx="5" fill="#EA580C"/>
+            <rect x="344" y="202" width="62" height="8" rx="4" fill="#FED7AA"/>
+            <rect x="336" y="228" width="78" height="24" rx="12" fill="#FFF7ED" stroke="#FDBA74"/>
+            <text x="375" y="244" text-anchor="middle" fill="#C2410C" font-size="10" font-weight="800" font-family="Inter, sans-serif">ROTATIVIDADE</text>
           </svg>
-          <div class="mt-4 text-center">
-            <span class="text-xs font-bold text-brand-700">CONTROLE DE ROTATIVIDADE • Gestão Diária de Escala</span>
+          <div class="mt-3 text-center">
+            <span class="text-xs font-extrabold text-brand-700">Escala equilibrada, polivalência visível e zero repetição no escuro</span>
           </div>
         </div>
       </div>
 
-      <!-- Coluna Direita: Card de Senha -->
       <div class="lg:col-span-5">
         <div class="bg-white border border-orange-100 rounded-3xl shadow-elevated p-8 sm:p-10 space-y-6">
           <div>
@@ -160,19 +168,17 @@
       </div>
     </div>
 
-    <!-- Rodapé -->
     <div class="text-center text-xs text-slate-400 py-2">
       CONTROLE DE ROTATIVIDADE • Gestão Diária de Escala © 2026
     </div>
   </div>
 
   <!-- ===================================================================== -->
-  <!-- CABEÇALHO CLARO COM DESTAQUE LARANJA                                  -->
+  <!-- CABEÇALHO                                                             -->
   <!-- ===================================================================== -->
   <header class="bg-white/95 backdrop-blur-md border-b border-orange-100 sticky top-0 z-30 shadow-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between py-3.5 gap-3">
-        <!-- Identidade: CONTROLE DE ROTATIVIDADE, gestão diaria de escala -->
         <div class="flex items-center gap-3.5">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-brand-600 flex items-center justify-center text-white shadow-md shadow-orange-500/20 shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
@@ -192,7 +198,6 @@
           </div>
         </div>
 
-        <!-- Botões de Ação, Sair e Backup -->
         <div class="flex flex-wrap items-center gap-2">
           <div id="save-indicator" class="text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-full flex items-center gap-1.5">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
@@ -215,7 +220,6 @@
             <input type="file" id="import-json-input" accept=".json" class="hidden" onchange="importBackupJSON(event)" />
           </label>
 
-          <!-- Botão Sair / Logout -->
           <button onclick="logoutSystem()" title="Encerrar sessão atual" class="text-xs font-semibold bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white border border-rose-200 px-3.5 py-1.5 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
             Sair
@@ -223,7 +227,6 @@
         </div>
       </div>
 
-      <!-- Navegação por Abas -->
       <nav class="flex space-x-2 overflow-x-auto pt-1" aria-label="Tabs">
         <button onclick="switchTab('diario')" id="tab-btn-diario" class="tab-btn px-3.5 py-2.5 text-sm font-bold border-b-2 border-brand-600 text-brand-600 whitespace-nowrap flex items-center gap-2 cursor-pointer transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -246,10 +249,8 @@
     </div>
   </header>
 
-  <!-- Toast de Notificações -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- Conteúdo Principal -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
     <!-- =================================================================== -->
@@ -277,7 +278,16 @@
           </div>
 
           <div class="flex flex-wrap items-center gap-2">
-            <!-- BOTÃO WHATSAPP -->
+            <button onclick="openBoardModal()" class="text-xs font-bold bg-white hover:bg-orange-50 text-brand-700 border border-orange-200 px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer" title="Visualização em quadro para consulta rápida">
+              <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M4 10h16M10 4v16"/></svg>
+              Quadro Visual
+            </button>
+
+            <button onclick="autoBalancePending()" class="text-xs font-bold bg-orange-50 hover:bg-orange-100 text-brand-700 border border-orange-200 px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer" title="Preenche espaços vazios priorizando variedade e respeitando limites consecutivos">
+              <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              Balancear Pendentes
+            </button>
+
             <button onclick="openWhatsAppModal()" class="text-xs font-bold bg-[#25D366] hover:bg-[#20BD5A] text-slate-950 px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5 cursor-pointer">
               <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
                 <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/>
@@ -312,6 +322,8 @@
 
           <div id="daily-family-cards" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-1"></div>
         </div>
+
+        <div id="balance-radar-bar" class="bg-gradient-to-r from-orange-50/80 via-white to-amber-50/70 border border-orange-200/80 rounded-2xl p-3.5 flex flex-col lg:flex-row lg:items-center justify-between gap-3"></div>
       </div>
 
       <!-- Tabela Principal -->
@@ -342,11 +354,11 @@
             <thead>
               <tr class="bg-orange-50/60 border-b border-orange-100 text-[11px] font-extrabold text-brand-700 uppercase tracking-wider">
                 <th class="py-3 px-4 w-12 text-center">#</th>
-                <th class="py-3 px-4 min-w-[230px]">Colaborador</th>
-                <th class="py-3 px-4 min-w-[230px]">1º Momento</th>
+                <th class="py-3 px-4 min-w-[240px]">Colaborador &amp; Polivalência</th>
+                <th class="py-3 px-4 min-w-[225px]">1º Momento</th>
                 <th class="py-3 px-1 w-10 text-center"></th>
-                <th class="py-3 px-4 min-w-[230px]">2º Momento</th>
-                <th class="py-3 px-4 min-w-[220px]">Monitoramento</th>
+                <th class="py-3 px-4 min-w-[225px]">2º Momento</th>
+                <th class="py-3 px-4 min-w-[230px]">Monitoramento &amp; Trilha</th>
               </tr>
             </thead>
             <tbody id="daily-table-body" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -379,7 +391,6 @@
         </button>
       </div>
 
-      <!-- Painel Raio-X Individual -->
       <div id="individual-xray-panel" class="hidden bg-white p-6 rounded-2xl shadow-elevated border border-orange-200 space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
           <div class="flex items-center gap-3.5">
@@ -419,7 +430,6 @@
         </div>
       </div>
 
-      <!-- Tabela Consolidada -->
       <div class="bg-white rounded-2xl shadow-soft border border-slate-200/80 overflow-hidden">
         <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
@@ -521,7 +531,7 @@ Maria Oliveira" class="w-full bg-slate-50 text-slate-900 border border-slate-200
                 <label class="block text-xs font-bold text-slate-700 mb-1">Setor / Cor da Nomenclatura</label>
                 <select id="new-act-family" class="clean-select w-full bg-slate-50 text-slate-900 border border-slate-200 rounded-xl px-3.5 py-2 text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer">
                   <option value="sorting">Sorting (Azul)</option>
-                  <option value="bipagem">Bipagem &amp; Etiqueta (Roxo/Índigo)</option>
+                  <option value="bipagem">Bipagem &amp; Etiqueta (Índigo)</option>
                   <option value="carretas">Docas / Carretas (Laranja)</option>
                   <option value="apoio">Apoio / Qualidade (Verde)</option>
                   <option value="ausencia">Ausências / Folgas / Férias (Cinza)</option>
@@ -568,11 +578,28 @@ Maria Oliveira" class="w-full bg-slate-50 text-slate-900 border border-slate-200
   </main>
 
   <!-- ===================================================================== -->
-  <!-- MODAL GERADOR DE ESCALA WHATSAPP (PADRÃO OFICIAL DO GRUPO)            -->
+  <!-- MODAL QUADRO VISUAL DA ESCALA DO DIA                                  -->
+  <!-- ===================================================================== -->
+  <div id="board-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-6">
+    <div class="bg-white rounded-3xl shadow-elevated max-w-6xl w-full max-h-[90vh] flex flex-col border border-orange-200 overflow-hidden">
+      <div class="px-6 py-4 bg-gradient-to-r from-orange-50 via-white to-orange-50/70 border-b border-orange-100 flex items-center justify-between gap-4">
+        <div>
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-brand-600">Visão Rápida de Operação</span>
+          <h3 id="board-modal-title" class="text-lg font-extrabold text-brand-700">Quadro da Escala</h3>
+        </div>
+        <button onclick="closeBoardModal()" class="text-xs font-bold text-slate-600 hover:text-brand-700 bg-white border border-slate-200 hover:border-orange-200 px-3.5 py-2 rounded-xl transition cursor-pointer">
+          Fechar Quadro
+        </button>
+      </div>
+      <div id="board-modal-content" class="p-6 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 bg-slate-50/60"></div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL GERADOR DE ESCALA WHATSAPP                                      -->
   <!-- ===================================================================== -->
   <div id="whatsapp-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-5">
     <div class="bg-white rounded-2xl shadow-elevated max-w-6xl w-full max-h-[92vh] flex flex-col border border-orange-100 overflow-hidden">
-      <!-- Cabeçalho do Modal -->
       <div class="px-6 py-4 border-b border-orange-100 flex flex-wrap items-center justify-between gap-3 bg-orange-50/50">
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-xl bg-[#25D366]/15 border border-[#25D366]/40 text-[#16A34A] flex items-center justify-center">
@@ -587,10 +614,10 @@ Maria Oliveira" class="w-full bg-slate-50 text-slate-900 border border-slate-200
         </div>
 
         <div class="flex items-center gap-2 flex-wrap">
-          <button onclick="importFromDailyMoment('m1')" class="text-xs font-bold bg-white hover:bg-orange-50 text-brand-700 border border-orange-200 px-3 py-1.5 rounded-xl transition cursor-pointer" title="Importa nomes da tabela diária (1º Momento)">
+          <button onclick="importFromDailyMoment('m1')" class="text-xs font-bold bg-white hover:bg-orange-50 text-brand-700 border border-orange-200 px-3 py-1.5 rounded-xl transition cursor-pointer">
             ↓ Puxar 1º Momento
           </button>
-          <button onclick="importFromDailyMoment('m2')" class="text-xs font-bold bg-white hover:bg-orange-50 text-orange-700 border border-orange-200 px-3 py-1.5 rounded-xl transition cursor-pointer" title="Importa nomes da tabela diária (2º Momento)">
+          <button onclick="importFromDailyMoment('m2')" class="text-xs font-bold bg-white hover:bg-orange-50 text-orange-700 border border-orange-200 px-3 py-1.5 rounded-xl transition cursor-pointer">
             ↓ Puxar 2º Momento
           </button>
           <button onclick="closeWhatsAppModal()" class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-200/60 transition cursor-pointer">
@@ -599,11 +626,8 @@ Maria Oliveira" class="w-full bg-slate-50 text-slate-900 border border-slate-200
         </div>
       </div>
 
-      <!-- Corpo em 2 Colunas -->
       <div class="flex-1 overflow-y-auto p-5 grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Formulário Editável -->
         <div class="lg:col-span-7 space-y-5 pr-1">
-          <!-- Meta do Dia -->
           <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-3">
             <div class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">🎯 Metas &amp; Equipes Gerais</div>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -641,126 +665,100 @@ Maria Oliveira" class="w-full bg-slate-50 text-slate-900 border border-slate-200
             </div>
           </div>
 
-          <!-- Abastecimento -->
           <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-3">
             <div class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">📦 Abastecimento</div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
               <div>
                 <label class="block text-[11px] font-bold text-slate-600 mb-1">Bancada 02</label>
-                <input type="text" id="wa-abast-02" placeholder="Ex: Anderson / Flávio" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+                <input type="text" id="wa-abast-02" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-600 mb-1">Bancada 03</label>
-                <input type="text" id="wa-abast-03" placeholder="Ex: Paulo Roberto" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+                <input type="text" id="wa-abast-03" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-600 mb-1">Bancada 04</label>
-                <input type="text" id="wa-abast-04" placeholder="Ex: Fábio" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+                <input type="text" id="wa-abast-04" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-600 mb-1">Bancada 05</label>
-                <input type="text" id="wa-abast-05" placeholder="Ex: Victor" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+                <input type="text" id="wa-abast-05" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-600 mb-1">Bancada 06</label>
-                <input type="text" id="wa-abast-06" placeholder="Ex: Moisés" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+                <input type="text" id="wa-abast-06" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
               </div>
             </div>
           </div>
 
-          <!-- Bancadas 02 a 06 + Sorting -->
           <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">🔹 Bancadas &amp; 🔄 Sorting (Separe nomes por linha)</span>
-            </div>
-
+            <div class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">🔹 Bancadas &amp; 🔄 Sorting (Separe nomes por linha)</div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <!-- Bancada 02 -->
               <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-2">
                 <div class="text-xs font-extrabold text-slate-900">🔹 BANCADA 02</div>
-                <textarea id="wa-b02" rows="2" placeholder="Júnior
-Lorena" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                <textarea id="wa-b02" rows="2" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
                 <div class="text-[11px] font-semibold text-slate-500">🔄 Sorting — Bancada 02</div>
-                <textarea id="wa-s02" rows="2" placeholder="Nomes do sorting..." oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                <textarea id="wa-s02" rows="2" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
               </div>
-
-              <!-- Bancada 03 -->
               <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-2">
                 <div class="text-xs font-extrabold text-slate-900">🔹 BANCADA 03</div>
-                <textarea id="wa-b03" rows="2" placeholder="David x Danilo
-Lourenço x Yara" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                <textarea id="wa-b03" rows="2" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
                 <div class="text-[11px] font-semibold text-slate-500">🔄 Sorting — Bancada 03</div>
-                <textarea id="wa-s03" rows="2" placeholder="Ana
-Camila" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                <textarea id="wa-s03" rows="2" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
               </div>
-
-              <!-- Bancada 04 -->
               <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-2">
                 <div class="text-xs font-extrabold text-slate-900">🔹 BANCADA 04</div>
-                <textarea id="wa-b04" rows="2" placeholder="Erinaldo x Willian
-Miguel x Alexandre" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                <textarea id="wa-b04" rows="2" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
                 <div class="text-[11px] font-semibold text-slate-500">🔄 Sorting — Bancada 04</div>
-                <textarea id="wa-s04" rows="2" placeholder="Ana
-Camila" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                <textarea id="wa-s04" rows="2" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
               </div>
-
-              <!-- Bancada 05 -->
               <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-2">
                 <div class="text-xs font-extrabold text-slate-900">🔹 BANCADA 05</div>
-                <textarea id="wa-b05" rows="2" placeholder="Cardoso x Wilton
-Keven x Regis" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                <textarea id="wa-b05" rows="2" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
                 <div class="text-[11px] font-semibold text-slate-500">🔄 Sorting — Bancada 05</div>
-                <textarea id="wa-s05" rows="2" placeholder="Claudiana
-Idacélio" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                <textarea id="wa-s05" rows="2" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
               </div>
-
-              <!-- Bancada 06 -->
               <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-2 sm:col-span-2">
                 <div class="text-xs font-extrabold text-slate-900">🔹 BANCADA 06</div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <textarea id="wa-b06" rows="2" placeholder="M.Felipe x Daniel
-Elykelli x Roberto" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
-                  <textarea id="wa-s06" rows="2" placeholder="Sorting B06:
-Jordão
-Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                  <textarea id="wa-b06" rows="2" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
+                  <textarea id="wa-s06" rows="2" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs text-slate-900 focus:bg-white focus:border-brand-500 focus:outline-none"></textarea>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Apoio e Faixas -->
           <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-3">
             <div class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">🛠️ Apoio Operacional &amp; Faixas</div>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <div>
                 <label class="block text-[11px] font-bold text-slate-600 mb-1">🧹 5s</label>
-                <input type="text" id="wa-5s" placeholder="Ex: Yara" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+                <input type="text" id="wa-5s" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-600 mb-1">📦 Volumoso</label>
-                <input type="text" id="wa-volumoso" placeholder="Ex: Valdenir / Ant.Alexandre" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+                <input type="text" id="wa-volumoso" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-600 mb-1">🛒 Puxar Gaiolas</label>
-                <input type="text" id="wa-gaiolas" placeholder="Ex: Hélio" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+                <input type="text" id="wa-gaiolas" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-600 mb-1">🔧 Concertos</label>
-                <input type="text" id="wa-concertos" placeholder="Ex: Berg" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+                <input type="text" id="wa-concertos" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-600 mb-1">🔤 Letras</label>
-                <input type="text" id="wa-letras" placeholder="Ex: A-1 até E-10" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+                <input type="text" id="wa-letras" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-600 mb-1">🏍️ Moto</label>
-                <input type="text" id="wa-moto" placeholder="Ex: A-1 até A-20" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
+                <input type="text" id="wa-moto" oninput="updateWhatsAppPreview()" class="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-900 focus:border-brand-500 focus:outline-none" />
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Preview Pronto para Copiar -->
         <div class="lg:col-span-5 flex flex-col h-full">
           <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-extrabold text-brand-700 uppercase tracking-wider">Pré-visualização da Mensagem</span>
@@ -770,20 +768,12 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
         </div>
       </div>
 
-      <!-- Rodapé com Botões de Cópia e Envio -->
       <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex flex-wrap items-center justify-between gap-3">
         <span class="text-xs text-slate-500">Os valores digitados ficam salvos automaticamente para o próximo turno.</span>
         <div class="flex items-center gap-2.5">
-          <button onclick="closeWhatsAppModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-200/70 rounded-xl transition cursor-pointer">
-            Fechar
-          </button>
-          <button onclick="sendDirectWhatsApp()" class="px-4 py-2.5 text-xs font-bold bg-white hover:bg-emerald-50 text-[#16A34A] border border-[#25D366]/50 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
-            Abrir no WhatsApp ↗
-          </button>
-          <button onclick="copyWhatsAppText()" class="px-5 py-2.5 text-xs font-extrabold bg-[#25D366] hover:bg-[#20BD5A] text-slate-950 rounded-xl shadow-sm transition flex items-center gap-2 cursor-pointer">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
-            Copiar Escala Pronta
-          </button>
+          <button onclick="closeWhatsAppModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-200/70 rounded-xl transition cursor-pointer">Fechar</button>
+          <button onclick="sendDirectWhatsApp()" class="px-4 py-2.5 text-xs font-bold bg-white hover:bg-emerald-50 text-[#16A34A] border border-[#25D366]/50 rounded-xl transition flex items-center gap-1.5 cursor-pointer">Abrir no WhatsApp ↗</button>
+          <button onclick="copyWhatsAppText()" class="px-5 py-2.5 text-xs font-extrabold bg-[#25D366] hover:bg-[#20BD5A] text-slate-950 rounded-xl shadow-sm transition flex items-center gap-2 cursor-pointer">Copiar Escala Pronta</button>
         </div>
       </div>
     </div>
@@ -827,7 +817,6 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
     </div>
   </div>
 
-  <!-- JAVASCRIPT -->
   <script>
     const STORAGE_KEY = 'rotatividade_escala_v6';
     const WA_STORAGE_KEY = 'rotatividade_whatsapp_template_v1';
@@ -839,8 +828,7 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
 
     function checkPassword(e) {
       e.preventDefault();
-      const val = document.getElementById('password-input').value;
-      if (val === getSystemPassword()) {
+      if (document.getElementById('password-input').value === getSystemPassword()) {
         document.getElementById('login-screen').style.display = 'none';
         sessionStorage.setItem('rotatividade_auth', 'true');
       } else {
@@ -875,11 +863,8 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
 
     function submitChangePassword(e) {
       e.preventDefault();
-      const current = document.getElementById('current-password').value;
-      const newPass = document.getElementById('new-password').value;
-
-      if (current === getSystemPassword()) {
-        localStorage.setItem('rotatividade_custom_password', newPass);
+      if (document.getElementById('current-password').value === getSystemPassword()) {
+        localStorage.setItem('rotatividade_custom_password', document.getElementById('new-password').value);
         closeChangePasswordModal();
         showToast('Senha alterada com sucesso!');
       } else {
@@ -897,7 +882,6 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
       const y = now.getFullYear();
       const m = String(now.getMonth() + 1).padStart(2, '0');
       const d = String(now.getDate()).padStart(2, '0');
-
       document.getElementById('daily-date').value = `${y}-${m}-${d}`;
       document.getElementById('report-month').value = `${y}-${m}`;
       renderDailyView();
@@ -936,6 +920,7 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
     const FAMILY_META = {
       sorting: {
         label: 'Sorting',
+        short: 'S',
         icon: '📦',
         selectClass: 'bg-sky-50/90 text-sky-800 border-sky-200 ring-1 ring-sky-200/60',
         pillClass: 'bg-sky-50 text-sky-700 border-sky-200',
@@ -943,6 +928,7 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
       },
       bipagem: {
         label: 'Bipagem & Etiqueta',
+        short: 'B',
         icon: '🏷️',
         selectClass: 'bg-indigo-50/90 text-indigo-800 border-indigo-200 ring-1 ring-indigo-200/60',
         pillClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
@@ -950,6 +936,7 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
       },
       carretas: {
         label: 'Docas / Carretas',
+        short: 'C',
         icon: '🚛',
         selectClass: 'bg-orange-50/90 text-orange-800 border-orange-200 ring-1 ring-orange-200/60',
         pillClass: 'bg-orange-50 text-orange-700 border-orange-200',
@@ -957,6 +944,7 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
       },
       apoio: {
         label: 'Apoio / Qualidade',
+        short: 'A',
         icon: '🛠️',
         selectClass: 'bg-emerald-50/90 text-emerald-800 border-emerald-200 ring-1 ring-emerald-200/60',
         pillClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -964,6 +952,7 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
       },
       ausencia: {
         label: 'Ausências / Folgas',
+        short: '—',
         icon: '🗓️',
         selectClass: 'bg-slate-100 text-slate-700 border-slate-300',
         pillClass: 'bg-slate-100 text-slate-600 border-slate-200',
@@ -1064,11 +1053,6 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
       const [y, m, d] = iso.split('-').map(Number);
       return ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'][new Date(y, m - 1, d).getDay()];
     }
-    function getShortWeekday(iso) {
-      if (!iso) return '';
-      const [y, m, d] = iso.split('-').map(Number);
-      return ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'][new Date(y, m - 1, d).getDay()];
-    }
 
     function calculateStreaks(empId, dateStr) {
       const dayEntry = (state.logs[dateStr] && state.logs[dateStr][empId]) || {};
@@ -1090,6 +1074,189 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
       return alerts;
     }
 
+    function getEmployeeMonthStats(empId, dateStr) {
+      const monthStr = dateStr ? dateStr.slice(0, 7) : '';
+      const monthDates = Object.keys(state.logs).filter(d => d.startsWith(monthStr) && d <= dateStr).sort();
+      const families = new Set();
+      let workShifts = 0;
+      const trail = [];
+
+      monthDates.forEach(d => {
+        const entry = state.logs[d][empId];
+        if (!entry) return;
+        [entry.m1, entry.m2].forEach(actId => {
+          const act = getAct(actId);
+          if (!act) return;
+          if (act.family !== 'ausencia') {
+            families.add(act.family);
+            workShifts++;
+            trail.push(act.family);
+          }
+        });
+      });
+
+      return {
+        distinctFamilies: families.size,
+        workShifts,
+        recentTrail: trail.slice(-4)
+      };
+    }
+
+    function renderBalanceRadar(dateStr) {
+      const radarEl = document.getElementById('balance-radar-bar');
+      const activeEmps = state.employees.filter(e => e.active !== false);
+      if (activeEmps.length === 0) {
+        radarEl.innerHTML = '';
+        return;
+      }
+
+      const stats = activeEmps.map(emp => ({
+        emp,
+        ...getEmployeeMonthStats(emp.id, dateStr)
+      }));
+
+      const ordered = [...stats].sort((a, b) => b.workShifts - a.workShifts);
+      const topEmp = ordered[0];
+      const lowEmp = ordered[ordered.length - 1];
+      const avgPoly = (stats.reduce((acc, s) => acc + s.distinctFamilies, 0) / stats.length).toFixed(1);
+
+      radarEl.innerHTML = `
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="bg-brand-600 text-white font-extrabold px-2.5 py-1 rounded-lg uppercase tracking-wider text-[10px]">Radar de Equilíbrio</span>
+          <span class="text-slate-700 font-semibold">
+            Polivalência média: <strong class="text-brand-700">${avgPoly} setores</strong>
+          </span>
+          <span class="text-slate-300 hidden sm:inline">•</span>
+          <span class="text-slate-600">
+            Maior carga: <button onclick="openEmployeeXRayFromDaily('${topEmp.emp.id}')" class="font-bold text-slate-900 hover:text-brand-600 underline cursor-pointer">${topEmp.emp.name.split(' ')[0]} (${topEmp.workShifts} turnos)</button>
+          </span>
+          <span class="text-slate-300 hidden sm:inline">•</span>
+          <span class="text-slate-600">
+            Menor carga: <button onclick="openEmployeeXRayFromDaily('${lowEmp.emp.id}')" class="font-bold text-brand-700 hover:underline cursor-pointer">${lowEmp.emp.name.split(' ')[0]} (${lowEmp.workShifts} turnos)</button>
+          </span>
+        </div>
+        <div class="text-[11px] font-bold text-brand-700">
+          Dica: use <span class="underline">Balancear Pendentes</span> para variar setores automaticamente
+        </div>
+      `;
+    }
+
+    function autoBalancePending() {
+      const dateStr = document.getElementById('daily-date').value;
+      const activeEmps = state.employees.filter(e => e.active !== false);
+      const workActs = state.activities.filter(a => a.active && a.family !== 'ausencia');
+      if (workActs.length === 0) {
+        showToast('Nenhuma atividade operacional ativa.', 'error');
+        return;
+      }
+
+      if (!state.logs[dateStr]) state.logs[dateStr] = {};
+      let filled = 0;
+
+      const monthStr = dateStr.slice(0, 7);
+      const monthDates = Object.keys(state.logs).filter(d => d.startsWith(monthStr));
+
+      activeEmps.forEach(emp => {
+        if (!state.logs[dateStr][emp.id]) state.logs[dateStr][emp.id] = { m1: '', m2: '' };
+        const entry = state.logs[dateStr][emp.id];
+
+        const empUsage = {};
+        monthDates.forEach(d => {
+          const e = state.logs[d][emp.id];
+          if (!e) return;
+          if (e.m1) empUsage[e.m1] = (empUsage[e.m1] || 0) + 1;
+          if (e.m2) empUsage[e.m2] = (empUsage[e.m2] || 0) + 1;
+        });
+
+        const pickBestAct = (avoidActId, avoidFamily) => {
+          const candidates = workActs
+            .filter(a => a.id !== avoidActId)
+            .sort((a, b) => {
+              const famPenaltyA = avoidFamily && a.family === avoidFamily ? 5 : 0;
+              const famPenaltyB = avoidFamily && b.family === avoidFamily ? 5 : 0;
+              const scoreA = (empUsage[a.id] || 0) + famPenaltyA;
+              const scoreB = (empUsage[b.id] || 0) + famPenaltyB;
+              return scoreA - scoreB;
+            });
+          return candidates[0] || workActs[0];
+        };
+
+        if (!entry.m1 && !entry.m2) {
+          const a1 = pickBestAct(null, null);
+          const a2 = pickBestAct(a1.id, a1.family);
+          entry.m1 = a1.id;
+          entry.m2 = a2.id;
+          filled += 2;
+        } else if (!entry.m1 && entry.m2) {
+          const a2 = getAct(entry.m2);
+          const a1 = pickBestAct(entry.m2, a2 ? a2.family : null);
+          entry.m1 = a1.id;
+          filled++;
+        } else if (entry.m1 && !entry.m2) {
+          const a1 = getAct(entry.m1);
+          if (a1 && a1.family === 'ausencia') {
+            entry.m2 = a1.id;
+          } else {
+            const a2 = pickBestAct(entry.m1, a1 ? a1.family : null);
+            entry.m2 = a2.id;
+          }
+          filled++;
+        }
+      });
+
+      if (filled === 0) {
+        showToast('Todos os momentos já estão preenchidos!');
+        return;
+      }
+
+      saveState();
+      renderDailyView();
+      showToast(`${filled} momento(s) balanceado(s) com foco em rotatividade!`);
+    }
+
+    function openBoardModal() {
+      const dateStr = document.getElementById('daily-date').value;
+      document.getElementById('board-modal-title').textContent = `Quadro da Escala — ${formatDateBR(dateStr)} (${getWeekdayName(dateStr)})`;
+
+      const dayLogs = state.logs[dateStr] || {};
+      const activeEmps = state.employees.filter(e => e.active !== false).sort((a, b) => a.name.localeCompare(b.name));
+
+      document.getElementById('board-modal-content').innerHTML = activeEmps.map(emp => {
+        const entry = dayLogs[emp.id] || {};
+        const a1 = getAct(entry.m1);
+        const a2 = getAct(entry.m2);
+        const f1 = a1 ? FAMILY_META[a1.family] : null;
+        const f2 = a2 ? FAMILY_META[a2.family] : null;
+
+        return `
+          <div class="bg-white rounded-2xl border border-orange-100 p-4 shadow-xs space-y-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-full ${getAvatarColor(emp.name)} font-display font-bold text-xs flex items-center justify-center shrink-0">${getInitials(emp.name)}</div>
+              <div class="font-bold text-slate-900 text-sm truncate">${emp.name}</div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="p-2 rounded-xl border ${f1 ? f1.pillClass : 'bg-slate-50 text-slate-400 border-slate-200'}">
+                <div class="text-[10px] font-bold uppercase opacity-75">1º Momento</div>
+                <div class="font-extrabold truncate mt-0.5">${a1 ? `${f1.icon} ${a1.name}` : 'Pendente'}</div>
+              </div>
+              <div class="p-2 rounded-xl border ${f2 ? f2.pillClass : 'bg-slate-50 text-slate-400 border-slate-200'}">
+                <div class="text-[10px] font-bold uppercase opacity-75">2º Momento</div>
+                <div class="font-extrabold truncate mt-0.5">${a2 ? `${f2.icon} ${a2.name}` : 'Pendente'}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const m = document.getElementById('board-modal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+    }
+
+    function closeBoardModal() {
+      const m = document.getElementById('board-modal');
+      m.classList.add('hidden'); m.classList.remove('flex');
+    }
+
     function changeDateBy(days) {
       const input = document.getElementById('daily-date');
       const [y, m, d] = input.value.split('-').map(Number);
@@ -1106,8 +1273,10 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
     }
 
     function renderDailyView() {
-      document.getElementById('daily-weekday-label').textContent = getWeekdayName(document.getElementById('daily-date').value);
+      const dateStr = document.getElementById('daily-date').value;
+      document.getElementById('daily-weekday-label').textContent = getWeekdayName(dateStr);
       renderFamilyCards();
+      renderBalanceRadar(dateStr);
       renderDailyTableOnly();
     }
 
@@ -1218,6 +1387,7 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
         const entry = dayLogs[emp.id] || { m1: '', m2: '' };
         const act1 = getAct(entry.m1), act2 = getAct(entry.m2);
         const streaks = calculateStreaks(emp.id, dateStr);
+        const stats = getEmployeeMonthStats(emp.id, dateStr);
 
         if (filterVal === 'pending' && entry.m1 && entry.m2) return;
         if (filterVal === 'alerts' && streaks.length === 0) return;
@@ -1228,9 +1398,17 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
         counter++;
         const style1 = act1 && FAMILY_META[act1.family] ? FAMILY_META[act1.family].selectClass : 'bg-white text-slate-700 border-slate-200';
         const style2 = act2 && FAMILY_META[act2.family] ? FAMILY_META[act2.family].selectClass : 'bg-white text-slate-700 border-slate-200';
-        const badge = streaks.length > 0 ?
-          `<span class="inline-flex items-center gap-1.5 text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-1 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>${streaks[0]}</span>` :
-          `<span class="inline-flex items-center gap-1.5 text-xs text-slate-400 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>Regular</span>`;
+
+        const trailChips = stats.recentTrail.length > 0
+          ? `<div class="flex items-center gap-1 mt-1">${stats.recentTrail.map(f => {
+              const fm = FAMILY_META[f] || FAMILY_META.ausencia;
+              return `<span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded border ${fm.pillClass}" title="${fm.label}">${fm.short}</span>`;
+            }).join('')}</div>`
+          : '';
+
+        const monitorHTML = streaks.length > 0
+          ? `<span class="inline-flex items-center gap-1.5 text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-1 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>${streaks[0]}</span>${trailChips}`
+          : `<span class="inline-flex items-center gap-1.5 text-xs text-slate-400 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>Regular</span>${trailChips}`;
 
         rows += `
           <tr class="group hover:bg-orange-50/30 transition-colors">
@@ -1239,8 +1417,11 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
               <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-full ${getAvatarColor(emp.name)} font-display font-bold text-xs flex items-center justify-center shrink-0">${getInitials(emp.name)}</div>
                 <div>
-                  <div class="font-bold text-slate-900 text-sm">${emp.name}</div>
-                  <button type="button" onclick="openEmployeeXRayFromDaily('${emp.id}')" class="text-[11px] font-bold text-brand-600 hover:text-brand-700 hover:underline cursor-pointer inline-flex items-center gap-1">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="font-bold text-slate-900 text-sm">${emp.name}</span>
+                    <span class="text-[10px] font-bold bg-orange-50 text-brand-700 border border-orange-200 px-1.5 py-0.5 rounded-md">${stats.distinctFamilies} setores</span>
+                  </div>
+                  <button type="button" onclick="openEmployeeXRayFromDaily('${emp.id}')" class="text-[11px] font-bold text-brand-600 hover:text-brand-700 hover:underline cursor-pointer inline-flex items-center gap-1 mt-0.5">
                     Ver Raio-X no mês →
                   </button>
                 </div>
@@ -1249,7 +1430,7 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
             <td class="py-3 px-4"><select onchange="handleShiftChange('${emp.id}', 'm1', this.value)" class="clean-select w-full border rounded-xl px-3.5 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer transition ${style1}">${buildSelectOptionsHTML(entry.m1)}</select></td>
             <td class="py-3 px-1 text-center"><button onclick="copyFirstToSecondSingle('${emp.id}')" title="Copiar 1º para 2º" class="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-orange-50 rounded-lg transition cursor-pointer"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></button></td>
             <td class="py-3 px-4"><select onchange="handleShiftChange('${emp.id}', 'm2', this.value)" class="clean-select w-full border rounded-xl px-3.5 py-2 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer transition ${style2}">${buildSelectOptionsHTML(entry.m2)}</select></td>
-            <td class="py-3 px-4">${badge}</td>
+            <td class="py-3 px-4">${monitorHTML}</td>
           </tr>
         `;
       });
@@ -1264,6 +1445,7 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
       const act = getAct(actId);
       if (moment === 'm1' && act && act.family === 'ausencia' && !state.logs[dateStr][empId].m2) state.logs[dateStr][empId].m2 = actId;
       saveState();
+      renderBalanceRadar(dateStr);
       renderDailyTableOnly();
     }
 
@@ -1301,9 +1483,6 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
       });
     }
 
-    // =====================================================================
-    // FUNÇÕES DO GERADOR DE ESCALA WHATSAPP
-    // =====================================================================
     const WA_FIELDS = [
       'wa-volumetria', 'wa-rotas', 'wa-saudacao', 'wa-carretas', 'wa-samu',
       'wa-abast-02', 'wa-abast-03', 'wa-abast-04', 'wa-abast-05', 'wa-abast-06',
@@ -1336,14 +1515,12 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
       importFromDailyMoment('m1', true);
       updateWhatsAppPreview();
       const modal = document.getElementById('whatsapp-modal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      modal.classList.remove('hidden'); modal.classList.add('flex');
     }
 
     function closeWhatsAppModal() {
       const modal = document.getElementById('whatsapp-modal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+      modal.classList.add('hidden'); modal.classList.remove('flex');
     }
 
     function importFromDailyMoment(momentKey, silent = false) {
@@ -1351,14 +1528,7 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
       const dayLogs = state.logs[dateStr] || {};
       const activeEmps = state.employees.filter(e => e.active !== false);
 
-      const groups = {
-        carretas: [],
-        samu: [],
-        volumoso: [],
-        conserto: [],
-        cincoS: [],
-        gaiolas: []
-      };
+      const groups = { carretas: [], samu: [], volumoso: [], conserto: [], cincoS: [], gaiolas: [] };
 
       activeEmps.forEach(emp => {
         const entry = dayLogs[emp.id];
@@ -1389,8 +1559,7 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
 
     function formatBulletLines(rawText) {
       const lines = rawText.split('\n').map(l => l.trim()).filter(Boolean);
-      if (lines.length === 0) return '- ';
-      return lines.map(l => `- ${l}`).join('\n');
+      return lines.length === 0 ? '- ' : lines.map(l => `- ${l}`).join('\n');
     }
 
     function updateWhatsAppPreview() {
@@ -1432,7 +1601,7 @@ Izaque" oninput="updateWhatsAppPreview()" class="w-full bg-slate-50 border borde
       const letras = document.getElementById('wa-letras').value || '';
       const moto = document.getElementById('wa-moto').value || '';
 
-      const message = `🏆 *ESCALA DE PROCESSAMENTO  📆${dt}*
+      document.getElementById('wa-preview-box').value = `🏆 *ESCALA DE PROCESSAMENTO  📆${dt}*
 ${saudacao} 🙌🏼
 Espero que estejam todos bem.
 
@@ -1507,15 +1676,11 @@ ${s06}
 
 🏍️ *MOTO*
 - ${moto}`;
-
-      document.getElementById('wa-preview-box').value = message;
     }
 
     function copyWhatsAppText() {
       const text = document.getElementById('wa-preview-box').value;
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('Escala copiada! Basta colar no grupo do WhatsApp.');
-      }).catch(() => {
+      navigator.clipboard.writeText(text).then(() => showToast('Escala copiada! Basta colar no grupo do WhatsApp.')).catch(() => {
         const box = document.getElementById('wa-preview-box');
         box.select();
         document.execCommand('copy');
@@ -1524,11 +1689,9 @@ ${s06}
     }
 
     function sendDirectWhatsApp() {
-      const text = encodeURIComponent(document.getElementById('wa-preview-box').value);
-      window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(document.getElementById('wa-preview-box').value)}`, '_blank');
     }
 
-    // RELATÓRIO & RAIO-X
     function renderActivityBadge(act) {
       if (!act) return `<span class="text-slate-400">—</span>`;
       const fam = FAMILY_META[act.family] || FAMILY_META.ausencia;
@@ -1678,7 +1841,6 @@ ${s06}
       showToast('CSV exportado!');
     }
 
-    // EQUIPE
     function addSingleEmployee(e) {
       e.preventDefault();
       const name = document.getElementById('new-emp-name').value.trim();
@@ -1752,7 +1914,6 @@ ${s06}
       });
     }
 
-    // CONFIG / ATIVIDADES
     function addActivityType(e) {
       e.preventDefault();
       const name = document.getElementById('new-act-name').value.trim();
@@ -1800,7 +1961,6 @@ ${s06}
       if (act) { act.active = !act.active; saveState(); renderConfigView(); showToast('Status alterado.'); }
     }
 
-    // MODAL & BACKUP
     let modalCb = null;
     function openConfirmModal(title, msg, cb) {
       document.getElementById('modal-title').textContent = title;
